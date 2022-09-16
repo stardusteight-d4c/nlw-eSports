@@ -36,7 +36,7 @@ export const CreateAdModal = () => {
     const formData = new FormData(event.target as HTMLFormElement)
     const data = Object.fromEntries(formData)
 
-    // fazer validação
+    // fazer validação, autenticação, reponsividade e ajustes no layout
     if (!data.name) {
       return
     }
