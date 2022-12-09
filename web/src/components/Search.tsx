@@ -1,20 +1,24 @@
 import { MagnifyingGlass } from 'phosphor-react'
-import React, { ChangeEvent, useState } from 'react'
+import React from 'react'
 
 const hostServer = import.meta.env.VITE_SERVER
 
 interface Props {
   setGames: React.Dispatch<React.SetStateAction<Game[]>>
   setTerm: React.Dispatch<React.SetStateAction<string | null | undefined>>
+  setPage: React.Dispatch<React.SetStateAction<number>>
 }
 
-export const Search = ({ setGames, setTerm }: Props) => {
+export const Search = ({ setGames, setTerm, setPage }: Props) => {
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value
     setTerm(term)
     fetch(`${hostServer}/api/game/searchGameByTitle?title=${term}`)
       .then((res) => res.json())
-      .then((data) => setGames(data))
+      .then((data) => {
+        setGames(data)
+        setPage(1)
+      })
       .catch((error) => console.log(error))
   }
 

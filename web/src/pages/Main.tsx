@@ -51,7 +51,7 @@ export const Main = (props: Props) => {
       <h1 className={styles.mainTitle}>
         Seu <span className={styles.nlwGradient}>duo</span> está aqui.
       </h1>
-      <Search setGames={setGames} setTerm={setTerm} />
+      <Search setGames={setGames} setTerm={setTerm} setPage={setPage} />
       <div className={styles.gamesAdsWrapper}>
         {games.length === 0 ? (
           <span className={styles.noGamesYet}>No games here</span>

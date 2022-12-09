@@ -35,12 +35,12 @@ export const GameBanner = ({ game }: Props) => {
   )
 }
 
-// className="object-fill"
+// className="object-fill line-clamp-2"
 
 const styles = {
   anchorCardContainer: `relative cursor-pointer min-h-[280px] max-h-[280px] rounded-lg overflow-hidden`,
   img: `w-full h-full object-fill`,
   infoOfCardWithOverlay: `w-full pt-16 pb-4 px-4 absolute bottom-0 inset-x-0 bg-gradient-to-b from-black/0 via-black/60 to-black/90`,
-  gameTitle: `font-bold text-white block`,
+  gameTitle: `font-bold text-white block line-clamp-2`,
   adsQuantity: `text-zinc-300 text-sm block`,
 }
