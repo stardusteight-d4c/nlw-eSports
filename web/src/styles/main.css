@@ -6,4 +6,23 @@
   body {
     @apply font-inter antialiased scroll-smooth bg-[#121214] bg-galaxy bg-cover bg-no-repeat max-w-[100vw] min-h-screen;
   }
+
+  ::-webkit-scrollbar {
+    @apply bg-transparent w-[5px];
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-violet-500 w-[5px] rounded-full;
+  }
+
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
 }

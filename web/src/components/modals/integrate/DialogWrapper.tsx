@@ -2,7 +2,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 
 interface Props {
   children: JSX.Element | JSX.Element[]
-  modal: JSX.Element 
+  modal: JSX.Element
 }
 
 export const DialogWrapper = ({ children, modal }: Props) => {

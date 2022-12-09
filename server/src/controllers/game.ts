@@ -4,13 +4,38 @@ import { convertHourStringToMinutes } from '../utils/convert-hour-string-to-minu
 import { convertMinutesToHourString } from '../utils/convert-minutes-to-hour-string'
 
 export class GameController {
+  async addGame(req: Request, res: Response) {
+    const { title, bannerUrl } = req.body
+
+    await prisma.game
+      .create({
+        data: {
+          title: title,
+          bannerUrl: bannerUrl,
+        },
+      })
+      .then((game) => res.status(201).json(game))
+      .catch((error) => {
+        console.error(error)
+        return res.status(500).json({
+          status: false,
+          msg: error,
+        })
+      })
+  }
+
   async getGames(req: Request, res: Response) {
+    const page = req.params.page
+    const skip = (Number(page) - 1) * 6
+    const total = await prisma.$transaction([prisma.game.count()])
+
     await prisma.game
       .findMany({
+        skip: skip,
         take: 6,
         include: { _count: { select: { ads: true } } },
       })
-      .then((games) => res.status(200).json(games))
+      .then((games) => res.status(200).json({games, total: total[0]}))
       .catch((error) => {
         console.error(error)
         return res.status(500).json({
@@ -21,13 +46,29 @@ export class GameController {
   }
 
   async getGameByTitle(req: Request, res: Response) {
-    const title = req.params.title
-
-    console.log(title);
-    
+    const title = req.query.title?.toString()
 
     await prisma.game
       .findFirst({ where: { title: { in: title, mode: 'insensitive' } } })
+      .then((game) => res.status(200).json(game))
+      .catch((error) => {
+        console.error(error)
+        return res.status(500).json({
+          status: false,
+          msg: error,
+        })
+      })
+  }
+
+  async searchGameByTitle(req: Request, res: Response) {
+    const title = req.query.title?.toString()
+
+    await prisma.game
+      .findMany({
+        take: 6,
+        where: { title: { contains: title, mode: 'insensitive' } },
+        include: { _count: { select: { ads: true } } },
+      })
       .then((game) => res.status(200).json(game))
       .catch((error) => {
         console.error(error)
