@@ -17,7 +17,7 @@ export const CreateAdModal = () => {
   const [useVoiceChannel, setUseVoiceChannel] = useState(false)
 
   useEffect(() => {
-    axios('http://localhost:3333/games').then((response) => {
+    axios.get('http://localhost:5000/api/game/games').then((response) => {
       setGames(response.data)
     })
   }, [])

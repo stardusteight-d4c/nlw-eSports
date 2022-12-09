@@ -1,11 +1,14 @@
 import { Router } from 'express'
-import { GamesController } from './controllers/game'
+import { GameController } from './controllers/game'
 
 const router = Router()
 
-const game = new GamesController()
+const game = new GameController()
 
 router.get('/games', game.get)
-router.post('/newGame', game.add)
+router.post('/newGame', game.addNewGame)
+router.post('/games/:id/ads', game.createAdvertisement)
+router.get('/games/:id/ads', game.getAdvertisements)
+router.get('/ads/:id/discord', game.getAdvertisementDiscord)
 
 export { router }
