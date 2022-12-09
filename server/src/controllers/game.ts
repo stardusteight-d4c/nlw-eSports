@@ -4,11 +4,38 @@ import { convertHourStringToMinutes } from '../utils/convert-hour-string-to-minu
 import { convertMinutesToHourString } from '../utils/convert-minutes-to-hour-string'
 
 export class GameController {
-  async get(req: Request, res: Response) {
-    const games = await prisma.game.findMany({
-      include: { _count: { select: { ads: true } } },
-    })
-    return res.status(200).json(games)
+  async getGames(req: Request, res: Response) {
+    await prisma.game
+      .findMany({
+        take: 6,
+        include: { _count: { select: { ads: true } } },
+      })
+      .then((games) => res.status(200).json(games))
+      .catch((error) => {
+        console.error(error)
+        return res.status(500).json({
+          status: false,
+          msg: error,
+        })
+      })
+  }
+
+  async getGameByTitle(req: Request, res: Response) {
+    const title = req.params.title
+
+    console.log(title);
+    
+
+    await prisma.game
+      .findFirst({ where: { title: { in: title, mode: 'insensitive' } } })
+      .then((game) => res.status(200).json(game))
+      .catch((error) => {
+        console.error(error)
+        return res.status(500).json({
+          status: false,
+          msg: error,
+        })
+      })
   }
 
   async addNewGame(req: Request, res: Response) {
@@ -73,7 +100,7 @@ export class GameController {
         },
       })
 
-      return res.json(
+      return res.status(200).json(
         ads.map((ad) => {
           return {
             ...ad,
