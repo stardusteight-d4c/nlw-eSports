@@ -12,6 +12,10 @@ import { CreateAdModal } from '../components/modals/CreateAdModal'
 import { DialogWrapper } from '../components/modals/integrate/DialogWrapper'
 import { AddGameModal } from '../components/modals/AddGameModal'
 import { Search } from '../components/Search'
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { auth } from '../firebase'
+import { useAppSelector } from '../store/hooks'
+import { selectUser } from '../store/userSlice'
 
 export const hostServer = import.meta.env.VITE_SERVER
 
@@ -22,6 +26,9 @@ export const Main = (props: Props) => {
   const [page, setPage] = useState<number>(1)
   const [totalItems, setTotalItems] = useState<number>(0)
   const [term, setTerm] = useState<string | null>()
+  const [admins, setAdmins] = useState<string | null>()
+  const currentUser = useAppSelector<User | null>(selectUser)
+  const [pagination, setPagination] = useState<any>([])
 
   useEffect(() => {
     fetch(`${hostServer}/api/game/games/${page}`)
@@ -33,16 +40,57 @@ export const Main = (props: Props) => {
       .catch((error) => console.log(error))
   }, [page])
 
-  const totalPages = Math.ceil(totalItems / 6)
+  useEffect(() => {
+    fetch('./admins.json')
+      .then((res) => res.json())
+      .then((data) => setAdmins(data.admins))
+      .catch((error) => console.log(error))
+  }, [currentUser])
 
-  const rendersPagination = () => {
-    let i = 0
-    const pages = []
-    while (i < totalPages) {
-      i++
-      pages.push(i)
+  const isUserAdmin = () => {
+    return currentUser && admins?.includes(currentUser.email)
+  }
+
+  const totalPages = Math.ceil(totalItems / 6)
+  // const rendersPagination = () => {
+  //   let i = 0
+  //   const pages = [1, 2, 3, 4, 5, 6, 7, 8]
+  //   // while (i < totalPages) {
+  //   //   i++
+  //   //   pages.push(i)
+  //   // }
+
+  //   return pages
+  // }
+
+  const provider = new GoogleAuthProvider()
+
+  useEffect(() => {
+    const rendersPagination = (page: number, totalPages: number) => {
+      const pages = []
+      if (totalPages <= 4) {
+        let i = 0
+        while (i < totalPages) {
+          i++
+          pages.push(i)
+        }
+      } else if (totalPages > 4 && page <= 2) {
+        pages.push(1, 2, 3, '...', totalPages)
+      } else if (page === totalPages) {
+        pages.push(1, '...', page - 2, page - 1, totalPages)
+      } else if (page === totalPages - 1) {
+        pages.push(page - 2, page - 1, page, totalPages)
+      } else if (totalPages > 4 && page > 2) {
+        pages.push(page - 2, page - 1, page, page + 1, '...', totalPages)
+      }
+      setPagination(pages)
     }
-    return pages
+    rendersPagination(page, totalPages)
+  }, [page, totalPages])
+
+  // console.log(range(page, totalPages))
+  const isString = (myVar: string | number | object) => {
+    return typeof myVar === 'string' || myVar instanceof String
   }
 
   return (
@@ -90,9 +138,12 @@ export const Main = (props: Props) => {
           >
             {!term && (
               <div className='inline-block space-x-2'>
-                {rendersPagination().map((pageItem) => (
+                {pagination.map((pageItem: any, index: React.Key) => (
                   <span
-                    onClick={() => setPage(pageItem)}
+                    key={index}
+                    onClick={() => {
+                      !isString(pageItem) && setPage(Number(pageItem))
+                    }}
                     className={`cursor-pointer w-8 h-8 inline-block rounded-md hover:bg-white/10 transition-all duration-300 text-white ${
                       pageItem === page && '!bg-violet-500'
                     }`}
@@ -113,16 +164,65 @@ export const Main = (props: Props) => {
               Publique um anúncio para encontrar novos players!
             </span>
           </div>
-          <div className='flex items-center gap-x-4'>
-            <DialogWrapper modal={<AddGameModal />}>
-              <PlusCircle size={24} />
-              <span>Adicionar game</span>
-            </DialogWrapper>
-            <DialogWrapper modal={<CreateAdModal games={games} />}>
-              <MagnifyingGlassPlus size={24} />
-              <span>Publicar anúncio</span>
-            </DialogWrapper>
-          </div>
+          {currentUser ? (
+            <div className='flex items-center gap-x-4'>
+              <button
+                onClick={() => auth.signOut()}
+                type='button'
+                className='py-3 hover:bg-red-600 transition-all duration-200 flex items-center gap-3 px-4 font-medium bg-red-500 text-white rounded-md'
+              >
+                <svg
+                  className='mr-2 -ml-1 w-4 h-4'
+                  aria-hidden='true'
+                  focusable='false'
+                  data-prefix='fab'
+                  data-icon='google'
+                  role='img'
+                  xmlns='http://www.w3.org/2000/svg'
+                  viewBox='0 0 488 512'
+                >
+                  <path
+                    fill='currentColor'
+                    d='M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z'
+                  ></path>
+                </svg>
+                Sair
+              </button>
+              {isUserAdmin() && (
+                <DialogWrapper modal={<AddGameModal />}>
+                  <PlusCircle size={24} />
+                  <span>Adicionar game</span>
+                </DialogWrapper>
+              )}
+              <DialogWrapper modal={<CreateAdModal games={games} />}>
+                <MagnifyingGlassPlus size={24} />
+                <span>Publicar anúncio</span>
+              </DialogWrapper>
+            </div>
+          ) : (
+            <button
+              onClick={() => signInWithPopup(auth, provider)}
+              type='button'
+              className='py-3 hover:bg-[#4285F4]/90 transition-all duration-200 flex items-center gap-3 px-4 font-medium bg-[#4285F4] text-white rounded-md'
+            >
+              <svg
+                className='mr-2 -ml-1 w-4 h-4'
+                aria-hidden='true'
+                focusable='false'
+                data-prefix='fab'
+                data-icon='google'
+                role='img'
+                xmlns='http://www.w3.org/2000/svg'
+                viewBox='0 0 488 512'
+              >
+                <path
+                  fill='currentColor'
+                  d='M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z'
+                ></path>
+              </svg>
+              Entre com o Google
+            </button>
+          )}
         </div>
       </div>
     </div>

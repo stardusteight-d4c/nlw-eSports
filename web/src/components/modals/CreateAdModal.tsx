@@ -4,7 +4,6 @@ import Input from './integrate/Input'
 import * as Checkbox from '@radix-ui/react-checkbox'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { useEffect, useState, FormEvent } from 'react'
-import axios from 'axios'
 import { DialogPortal } from './integrate/DialogPortal'
 
 interface Props {
@@ -31,15 +30,15 @@ export const CreateAdModal = ({ games }: Props) => {
     }
 
     try {
-      await axios.post(`http://localhost:3333/games/${data.game}/ads`, {
-        name: data.name,
-        yearsPlaying: Number(data.yearsPlaying),
-        discord: data.discord,
-        weekDays: weekDays.map(Number),
-        hourStart: data.hourStart,
-        hourEnd: data.hourEnd,
-        useVoiceChannel: useVoiceChannel,
-      })
+      // await axios.post(`http://localhost:3333/games/${data.game}/ads`, {
+      //   name: data.name,
+      //   yearsPlaying: Number(data.yearsPlaying),
+      //   discord: data.discord,
+      //   weekDays: weekDays.map(Number),
+      //   hourStart: data.hourStart,
+      //   hourEnd: data.hourEnd,
+      //   useVoiceChannel: useVoiceChannel,
+      // })
 
       alert('Anúncio criado com sucesso!')
     } catch (error) {
