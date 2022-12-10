@@ -10,7 +10,7 @@ import {
 import { GameBanner } from '../components/GameBanner'
 import { CreateAdModal } from '../components/modals/CreateAdModal'
 import { DialogWrapper } from '../components/modals/integrate/DialogWrapper'
-import { AddGameModal } from '../components/modals/AddGameModal'
+import { ManageGame } from '../components/modals/ManageGame'
 import { Search } from '../components/Search'
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { auth } from '../firebase'
@@ -189,9 +189,9 @@ export const Main = (props: Props) => {
                 Sair
               </button>
               {isUserAdmin() && (
-                <DialogWrapper modal={<AddGameModal />}>
+                <DialogWrapper modal={<ManageGame />}>
                   <PlusCircle size={24} />
-                  <span>Adicionar game</span>
+                  <span>Gerenciar game</span>
                 </DialogWrapper>
               )}
               <DialogWrapper modal={<CreateAdModal games={games} />}>

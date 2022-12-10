@@ -35,7 +35,7 @@ export class GameController {
         take: 6,
         include: { _count: { select: { ads: true } } },
       })
-      .then((games) => res.status(200).json({games, total: total[0]}))
+      .then((games) => res.status(200).json({ games, total: total[0] }))
       .catch((error) => {
         console.error(error)
         return res.status(500).json({
@@ -84,6 +84,48 @@ export class GameController {
     await prisma.game
       .create({ data: { title, bannerUrl } })
       .then((game) => res.status(201).json(game))
+      .catch((error) => {
+        console.error(error)
+        return res.status(500).json({
+          status: false,
+          msg: error,
+        })
+      })
+  }
+
+  async updateGame(req: Request, res: Response) {
+    const { id, title, bannerUrl } = req.body
+
+    await prisma.game
+      .update({
+        where: {
+          id,
+        },
+        data: {
+          title,
+          bannerUrl,
+        },
+      })
+      .then((game) => res.status(200).json(game))
+      .catch((error) => {
+        console.error(error)
+        return res.status(500).json({
+          status: false,
+          msg: error,
+        })
+      })
+  }
+
+  async deleteGame(req: Request, res: Response) {
+    const id = req.query.gameId
+
+    await prisma.game
+      .delete({
+        where: {
+          id: String(id),
+        },
+      })
+      .then(() => res.status(200).json({ msg: 'Deleted item' }))
       .catch((error) => {
         console.error(error)
         return res.status(500).json({

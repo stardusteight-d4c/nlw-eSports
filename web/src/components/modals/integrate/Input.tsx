@@ -1,10 +1,8 @@
-import { InputHTMLAttributes, LegacyRef, MutableRefObject } from 'react'
+import { InputHTMLAttributes } from 'react'
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  ref?: any
-}
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {}
 
-const Input = ({ ref, ...props }: InputProps) => {
+const Input = ({ ...props }: InputProps) => {
   return (
     <input
       {...props}

@@ -13,5 +13,7 @@ router.get('/ads/:id/discord', game.getAdvertisementDiscord)
 router.get('/getGameByTitle', game.getGameByTitle)
 router.get('/searchGameByTitle', game.searchGameByTitle)
 router.post('/addGame', game.addGame)
+router.put('/updateGame', game.updateGame)
+router.delete('/deleteGame', game.deleteGame)
 
 export { router }
