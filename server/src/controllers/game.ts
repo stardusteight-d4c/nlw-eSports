@@ -49,7 +49,10 @@ export class GameController {
     const title = req.query.title?.toString()
 
     await prisma.game
-      .findFirst({ where: { title: { in: title, mode: 'insensitive' } } })
+      .findFirst({
+        where: { title: { in: title, mode: 'insensitive' } },
+        include: { ads: true },
+      })
       .then((game) => res.status(200).json(game))
       .catch((error) => {
         console.error(error)

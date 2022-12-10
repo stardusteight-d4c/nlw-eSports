@@ -9,16 +9,16 @@ datasource db {
 
 model Game {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
-  title     String 
-  bannerUrl String 
+  title     String
+  bannerUrl String
   ads       Ad[]
 
-  @@map("games") // collection name in database
+  @@map("games")
 }
 
 model Ad {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  gameId          String
+  gameId          String   @db.ObjectId
   name            String
   yearsPlaying    Int
   discord         String

@@ -3,8 +3,10 @@ import { Check, GameController } from 'phosphor-react'
 import Input from './integrate/Input'
 import * as Checkbox from '@radix-ui/react-checkbox'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
-import { useEffect, useState, FormEvent } from 'react'
+import { useState, FormEvent } from 'react'
 import { DialogPortal } from './integrate/DialogPortal'
+
+const hostServer = import.meta.env.VITE_SERVER
 
 interface Props {
   games: Game[]
@@ -30,15 +32,21 @@ export const CreateAdModal = ({ games }: Props) => {
     }
 
     try {
-      // await axios.post(`http://localhost:3333/games/${data.game}/ads`, {
-      //   name: data.name,
-      //   yearsPlaying: Number(data.yearsPlaying),
-      //   discord: data.discord,
-      //   weekDays: weekDays.map(Number),
-      //   hourStart: data.hourStart,
-      //   hourEnd: data.hourEnd,
-      //   useVoiceChannel: useVoiceChannel,
-      // })
+      fetch(`${hostServer}/api/game/${data.game}/ads`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: data.name,
+          yearsPlaying: Number(data.yearsPlaying),
+          discord: data.discord,
+          weekDays: weekDays.map(Number),
+          hourStart: data.hourStart,
+          hourEnd: data.hourEnd,
+          useVoiceChannel: useVoiceChannel,
+        }),
+      })
 
       alert('Anúncio criado com sucesso!')
     } catch (error) {
