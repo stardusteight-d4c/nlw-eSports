@@ -10,7 +10,7 @@ import {
 import { GameBanner } from '../components/GameBanner'
 import { CreateAdModal } from '../components/modals/CreateAdModal'
 import { DialogWrapper } from '../components/modals/integrate/DialogWrapper'
-import { ManageGame } from '../components/modals/ManageGame'
+import { ManageGameModal } from '../components/modals/ManageGameModal'
 import { Search } from '../components/Search'
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { auth } from '../firebase'
@@ -92,7 +92,7 @@ export const Main = (props: Props) => {
       <Search setGames={setGames} setTerm={setTerm} setPage={setPage} />
       <div className={styles.gamesAdsWrapper}>
         {games.length === 0 ? (
-          <span className={styles.noGamesYet}>No games here</span>
+          <span className={styles.noGamesYet}>...</span>
         ) : (
           <div className='gap-x-4 relative grid grid-cols-6 mt-8 w-full'>
             <>
@@ -179,7 +179,7 @@ export const Main = (props: Props) => {
                 Sair
               </button>
               {isUserAdmin() && (
-                <DialogWrapper modal={<ManageGame />}>
+                <DialogWrapper modal={<ManageGameModal />}>
                   <PlusCircle size={24} />
                   <span>Gerenciar game</span>
                 </DialogWrapper>
@@ -227,5 +227,5 @@ const styles = {
   nlwGradient: `bg-gradient-to-r from-[#9572FC] via-[#43E7AD] to-[#E1D55D] bg-clip-text text-transparent`,
   noGamesYet: `text-5xl text-white/90 flex flex-col items-center justify-center text-center inline-block w-full max-h-[280px] min-h-[280px]`,
   gamesAdsWrapper: `w-full gap-6 mt-full`,
-  ads: `bg-[#2a2634] flex justify-between  items-center relative px-8 py-6 mt-8 rounded-lg before:absolute before:-top-1 before:inset-x-0 before:rounded-b before:-z-10 before:rounded-xl before:w-full before:h-16 before:bg-gradient-to-r before:from-[#9572FC] before:via-[#43E7AD] before:to-[#E1D55D]`,
+  ads: `bg-[#2a2634] flex justify-between items-center relative px-8 py-6 mt-8 rounded-lg before:absolute before:-top-1 before:inset-x-0 before:rounded-b before:-z-10 before:rounded-xl before:w-full before:h-16 before:bg-gradient-to-r before:from-[#9572FC] before:via-[#43E7AD] before:to-[#E1D55D]`,
 }

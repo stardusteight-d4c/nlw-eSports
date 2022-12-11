@@ -61,7 +61,7 @@ export const CreateAdModal = ({ games }: Props) => {
 
   return (
     <DialogPortal title="Publique um anúncio">
-      <form onSubmit={handleCreateAd} className="mt-4 flex flex-col gap-4">
+      <form onSubmit={handleCreateAd} className="mt-4 pb-[70px] max-w-[400px] flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <label htmlFor="game" className="font-semibold">
             Qual o game?

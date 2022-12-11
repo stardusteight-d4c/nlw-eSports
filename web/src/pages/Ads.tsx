@@ -1,6 +1,10 @@
+import { GameController } from 'phosphor-react'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import { ConnectModal } from '../components/modals/ConnectModal'
+import { DialogWrapper } from '../components/modals/integrate/DialogWrapper'
 import { hostServer } from './Main'
+import logoEsports from '/assets/logo-esports.svg'
 
 interface Props {}
 
@@ -18,78 +22,123 @@ export const Ads = (props: Props) => {
 
   console.log(game)
 
-  const formatDate = (date: Date) => (
-    <>
-      {new Date(date).getFullYear()}/{new Date(date).getMonth() + 1}/
-      {new Date(date).getDate()} • {new Date(date).getHours()}:
-      {new Date(date).getMinutes() <= 9
-        ? '0' + new Date(date).getMinutes()
-        : new Date(date).getMinutes()}
-    </>
-  )
+  const rendersWeekDays = (numberDay: string) => {
+    const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
+    const daysOff = numberDay.split(',')
 
-  const convertWeekDays = (numberDay: string) =>
-    numberDay.split(',').map((day) => (
-      <span className="py-1 px-2 rounded-full bg-violet-600 text-sm cursor-pointer">
-        {Number(day) === 0 && 'Dom'}
-        {Number(day) === 1 && 'Seg'}
-        {Number(day) === 2 && 'Ter'}
-        {Number(day) === 3 && 'Qua'}
-        {Number(day) === 4 && 'Qui'}
-        {Number(day) === 5 && 'Sex'}
-        {Number(day) === 6 && 'Sáb'}
+    return weekDays.map((day, index) => (
+      <span
+        key={index}
+        className={`${
+          daysOff.includes(index.toString()) ? 'bg-violet-500' : 'bg-white/10 '
+        } py-[2px] px-[4px] h-fit rounded-md text-xs cursor-pointer`}
+      >
+        {day}
       </span>
     ))
+  }
+
+  function convertMinutesToHourString(minutesAmount: number) {
+    const hours = Math.floor(minutesAmount / 60)
+    const minutes = minutesAmount % 60
+
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(
+      2,
+      '0',
+    )}`
+  }
 
   return (
     <div className={styles.wrapper}>
-      <div className="flex items-center rounded-md w-full max-w-[600px] bg-[#2A2634] p-4 gap-x-5">
-        <img
-          src={game?.bannerUrl}
-          className="w-[100px] h-[150px] rounded-md object-fill"
-        />
-        <div className="my-8 text-center mx-auto">
-          <h1 className="text-3xl font-medium w-[300px] line-clamp-2">
+      <div className="flex flex-col min-h-screen z-10 bg-[#2A2634] items-center justify-center rounded-md overflow-hidden w-full  py-4">
+        <div className="relative mt-8 w-24 h-24">
+          <img
+            src={game?.bannerUrl}
+            className="w-24 h-24 rounded-full object-cover"
+          />
+          <div className="absolute -left-[2px] -top-[2px] mx-auto inset-0 w-[100px] h-[100px] -z-10 rounded-full bg-gradient-to-r from-[#9572FC] via-[#43E7AD] to-[#E1D55D]" />
+        </div>
+        <div className="my-2  text-center relative mx-auto">
+          <h1 className="text-3xl mt-2 font-medium w-[300px] line-clamp-2">
             {game?.title}
           </h1>
-          <span className="text-gray-500">Conecte-se e comece a jogar!</span>
+          <span className="text-gray-400">Conecte-se e comece a jogar!</span>
         </div>
-      </div>
-      <div className="flex items-center mt-4">
-        <div className="flex flex-col gap-y-5 mx-auto">
-          <div className="flex    rounded-md gap-x-5">
-            {game?.ads?.map((ad, index) => (
-              <div key={index} className="w-[280px] p-4 rounded-md bg-[#2A2634] ">
-                <div className="text-gray-500 text-center">
-                  {formatDate(new Date(ad.createdAt))}
-                </div>
-                <div className="flex items-center justify-center gap-x-2">
-                  <span className="text-gray-500 inline-block whitespace-nowrap">
-                    Publicado por
-                  </span>
-                  <div className="flex items-center gap-x-2 mt-1">
-                    <img src={ad.userImg} className="rounded-full w-8 h-8" />
+        <div className="flex items-center flex-wrap justify-start">
+          {game !== undefined &&
+          game.ads?.length !== undefined &&
+          game.ads?.length > 0 ? (
+            <>
+              {game?.ads?.map((ad, index) => (
+                <div
+                  key={index}
+                  className="max-w-[250px] mb-8 rounded-md mx-2 min-w-[250px] py-4 bg-[#2A2634]"
+                >
+                  <div className="mx-auto flex flex-col w-fit">
+                    <div>
+                      <span className="text-[#C4C4C6] font-medium mb-1">
+                        Publicado por
+                      </span>
+                      <div
+                        title={ad.name}
+                        className="font-semibold truncate text-lg flex items-center gap-x-2"
+                      >
+                        <img
+                          src={ad.userImg}
+                          className="rounded-full w-8 h-8"
+                        />
+                        <span className="truncate w-[125px]">{ad.name}</span>
+                      </div>
+                    </div>
+                    <div className="mt-2">
+                      <span className="text-[#C4C4C6] font-medium">
+                        Tempo de jogo
+                      </span>
+                      <div className="font-semibold text-lg truncate w-[125px]">
+                        {ad.yearsPlaying} anos
+                      </div>
+                    </div>
+                    <div className="my-2">
+                      <span className="text-[#C4C4C6] font-medium">
+                        Disponibilidade
+                      </span>
+                      <div className="font-semibold w-[150px] flex flex-wrap gap-2">
+                        <div>
+                          <div className="inline-block w-full text-sm">
+                            <span className="text-[#C4C4C6]">Entre</span>{' '}
+                            {convertMinutesToHourString(ad.hourStart)}{' '}
+                            <span className="text-[#C4C4C6]">e</span>{' '}
+                            {convertMinutesToHourString(ad.hourEnd)}
+                          </div>
+                        </div>
+                        {rendersWeekDays(ad.weekDays)}
+                      </div>
+                    </div>
+                    <div className="my-2">
+                      <span className="text-[#C4C4C6] font-medium">
+                        Chamada de áudio?
+                      </span>
+                      <div
+                        className={`${
+                          ad.useVoiceChannel ? 'text-green-500' : 'text-red-500'
+                        } font-semibold text-lg`}
+                      >
+                        {ad.useVoiceChannel ? 'Sim' : 'Não'}
+                      </div>
+                    </div>
+                    <DialogWrapper
+                      modal={<ConnectModal userDiscord={ad.discord} />}
+                    >
+                      <GameController size={24} />
+                      <span>Conectar</span>
+                    </DialogWrapper>
                   </div>
                 </div>
-                <div className="my-2">
-                  <span className="text-gray-500">Nome</span>
-                  <div className="font-semibold truncate text-lg">
-                    {ad.name}
-                  </div>
-                </div>
-                <div className="my-2">
-                  <span className="text-gray-500">Tempo de jogo</span>
-                  <div className="font-semibold text-lg">{ad.yearsPlaying}</div>
-                </div>
-                <div className="my-2">
-                  <span className="text-gray-500">Disponibilidade</span>
-                  <div className="font-semibold  flex flex-wrap gap-2">
-                    {convertWeekDays(ad.weekDays)}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </>
+          ) : (
+            <span className='text-gray-500 text-4xl my-5'>Ainda não há anúncios</span>
+          )}
         </div>
       </div>
     </div>
@@ -97,5 +146,5 @@ export const Ads = (props: Props) => {
 }
 
 const styles = {
-  wrapper: `max-w-screen-xl text-white w-full mx-auto h-screen flex flex-col items-center pt-14`,
+  wrapper: `bg-[#2A2634] px-[225px] z-10 text-white w-screen mx-auto flex flex-col items-center justify-center`,
 }
