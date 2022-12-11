@@ -52,16 +52,6 @@ export const Main = (props: Props) => {
   }
 
   const totalPages = Math.ceil(totalItems / 6)
-  // const rendersPagination = () => {
-  //   let i = 0
-  //   const pages = [1, 2, 3, 4, 5, 6, 7, 8]
-  //   // while (i < totalPages) {
-  //   //   i++
-  //   //   pages.push(i)
-  //   // }
-
-  //   return pages
-  // }
 
   const provider = new GoogleAuthProvider()
 

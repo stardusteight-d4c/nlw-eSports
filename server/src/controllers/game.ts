@@ -147,6 +147,7 @@ export class GameController {
         data: {
           gameId,
           name: body.name,
+          userImg: body.userImg,
           yearsPlaying: body.yearsPlaying,
           discord: body.discord,
           weekDays: body.weekDays.join(','),

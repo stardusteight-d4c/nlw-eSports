@@ -20,6 +20,7 @@ model Ad {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   gameId          String   @db.ObjectId
   name            String
+  userImg         String
   yearsPlaying    Int
   discord         String
   weekDays        String

@@ -1,2 +1,2 @@
 export { Main } from './Main'
-export { Ad } from './Ad'
+export { Ads } from './Ads'

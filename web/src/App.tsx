@@ -2,7 +2,7 @@ import { onAuthStateChanged } from 'firebase/auth'
 import { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { auth } from './firebase'
-import { Ad, Main } from './pages'
+import { Ads, Main } from './pages'
 import { useAppDispatch } from './store/hooks'
 import { login, logout } from './store/userSlice'
 
@@ -17,7 +17,8 @@ export const App = () => {
               uid: user.uid,
               email: user.email,
               name: user.displayName,
-            })
+              img: user.photoURL,
+            }),
           )
         : dispatch(logout())
     })
@@ -25,8 +26,8 @@ export const App = () => {
 
   return (
     <Routes>
-      <Route path='/' element={<Main />} />
-      <Route path='/ad/:game' element={<Ad />} />
+      <Route path="/" element={<Main />} />
+      <Route path="/ads/:game" element={<Ads />} />
     </Routes>
   )
 }

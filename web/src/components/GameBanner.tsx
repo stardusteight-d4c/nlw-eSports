@@ -19,7 +19,7 @@ export const GameBanner = ({ game }: Props) => {
 
   return (
     <a
-      onClick={() => navigate(`/ad/${slug}`)}
+      onClick={() => navigate(`/ads/${slug}`)}
       className={styles.anchorCardContainer}
     >
       <img

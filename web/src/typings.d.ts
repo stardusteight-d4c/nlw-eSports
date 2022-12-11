@@ -11,13 +11,14 @@ interface Game {
 interface Ad {
   createdAt: string
   discord: string
+  userImg: string
   gameId: string
   hourEnd: number
   hourStart: number
   id: string
   name: string
   useVoiceChannel: boolean
-  weekDays: number
+  weekDays: string
   yearsPlaying: number
 }
 
@@ -25,4 +26,5 @@ interface User {
   uid: string
   email: string
   name: string
+  img: string
 }
