@@ -1,6 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { Check, GameController } from 'phosphor-react'
-import Input from './integrate/Input'
+import { Input } from './integrate/Input'
 import * as Checkbox from '@radix-ui/react-checkbox'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { useState, FormEvent } from 'react'
@@ -59,25 +59,39 @@ export const CreateAdModal = ({ games }: Props) => {
     }
   }
 
+  const rendersToggleItems = () => {
+    const days = [
+      'Domingo',
+      'Segunda',
+      'Terça',
+      'Quarta',
+      'Quinta',
+      'Sexta',
+      'Sábado',
+    ]
+
+    return days.map((day, index) => (
+      <ToggleGroup.Item
+        value={index.toString()}
+        title={day}
+        className={`${style.toggleItem} ${
+          weekDays.includes(index.toString()) ? 'bg-violet-500' : 'bg-zinc-900'
+        }`}
+      >
+        {day.substring(0, 1)}
+      </ToggleGroup.Item>
+    ))
+  }
+
   return (
     <DialogPortal title="Publique um anúncio">
-      <form
-        onSubmit={handleCreateAd}
-        className="mt-2 md:mt-4 w-full max-w-[95vw] pb-[70px] md:max-w-[400px] flex flex-col gap-4"
-      >
-        <div className="flex flex-col gap-1 md:gap-2">
+      <form onSubmit={handleCreateAd} className={style.formWrapper}>
+        <div className={style.selectGameContainer}>
           <label htmlFor="game" className="font-semibold">
             Qual o game?
           </label>
-          <select
-            id="game"
-            name="gameId"
-            defaultValue=""
-            className="bg-zinc-900 appearance-none placeholder:text-zinc-500 focus:outline-none focus:ring focus:ring-violet-600 py-3 px-4 rounded text-sm"
-          >
-            <option disabled value="">
-              Selecione o game que deseja jogar
-            </option>
+          <select id="game" name="gameId" className={style.select}>
+            <option disabled>Selecione o game que deseja jogar</option>
             {games.map((game) => {
               return (
                 <option key={game.id} value={game.id}>
@@ -87,7 +101,7 @@ export const CreateAdModal = ({ games }: Props) => {
             })}
           </select>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className={style.formItemContainer}>
           <label htmlFor="name" className="font-semibold">
             Seu nome (ou nickname)
           </label>
@@ -97,8 +111,8 @@ export const CreateAdModal = ({ games }: Props) => {
             placeholder="Como te chamam dentro do game?"
           />
         </div>
-        <div className="grid grid-cols-2 gap-6">
-          <div className="flex flex-col gap-2">
+        <div className={style.yearsPlayingAndDiscordWrapper}>
+          <div className={style.formItemContainer}>
             <label htmlFor="yearsPlaying">Joga há quantos anos?</label>
             <Input
               name="yearsPlaying"
@@ -107,86 +121,24 @@ export const CreateAdModal = ({ games }: Props) => {
               placeholder="Tudo bem ser ZERO"
             />
           </div>
-          <div className="flex flex-col gap-2">
+          <div className={style.formItemContainer}>
             <label htmlFor="discord">Qual seu Discord?</label>
             <Input name="discord" id="discord" placeholder="Usuario#0000" />
           </div>
         </div>
-        <div className="flex flex-col md:flex-row gap-6">
-          <div className="flex flex-col gap-2">
+        <div className={style.weekDaysAndHoursWrapper}>
+          <div className={style.formItemContainer}>
             <label htmlFor="weekDays">Quando costuma jogar?</label>
             <ToggleGroup.Root
               type="multiple"
-              className="md:w-[180px] gap-2 md:gap-2 md:gap-x-4 flex flex-wrap"
+              className={style.toggleGroupContainer}
               value={weekDays}
               onValueChange={setWeekDays}
             >
-              <ToggleGroup.Item
-                value="0"
-                title="Domingo"
-                className={`w-8 h-8 rounded ${
-                  weekDays.includes('0') ? 'bg-violet-500' : 'bg-zinc-900'
-                }`}
-              >
-                D
-              </ToggleGroup.Item>
-              <ToggleGroup.Item
-                value="1"
-                title="Segunda"
-                className={`w-8 h-8 rounded ${
-                  weekDays.includes('1') ? 'bg-violet-500' : 'bg-zinc-900'
-                }`}
-              >
-                S
-              </ToggleGroup.Item>
-              <ToggleGroup.Item
-                value="2"
-                title="Terça"
-                className={`w-8 h-8 rounded ${
-                  weekDays.includes('2') ? 'bg-violet-500' : 'bg-zinc-900'
-                }`}
-              >
-                T
-              </ToggleGroup.Item>
-              <ToggleGroup.Item
-                value="3"
-                title="Quarta"
-                className={`w-8 h-8 rounded ${
-                  weekDays.includes('3') ? 'bg-violet-500' : 'bg-zinc-900'
-                }`}
-              >
-                Q
-              </ToggleGroup.Item>
-              <ToggleGroup.Item
-                value="4"
-                title="Quinta"
-                className={`w-8 h-8 rounded ${
-                  weekDays.includes('4') ? 'bg-violet-500' : 'bg-zinc-900'
-                }`}
-              >
-                Q
-              </ToggleGroup.Item>
-              <ToggleGroup.Item
-                value="5"
-                title="Sexta"
-                className={`w-8 h-8 rounded ${
-                  weekDays.includes('5') ? 'bg-violet-500' : 'bg-zinc-900'
-                }`}
-              >
-                S
-              </ToggleGroup.Item>
-              <ToggleGroup.Item
-                value="6"
-                title="Sábado"
-                className={`w-8 h-8 rounded ${
-                  weekDays.includes('6') ? 'bg-violet-500' : 'bg-zinc-900'
-                }`}
-              >
-                S
-              </ToggleGroup.Item>
+              {rendersToggleItems()}
             </ToggleGroup.Root>
           </div>
-          <div className="flex flex-col gap-2 flex-1">
+          <div className={`${style.formItemContainer} flex-1`}>
             <label htmlFor="hourStart">Qual horário do dia?</label>
             <div className="grid grid-cols-2 gap-2">
               <Input
@@ -233,4 +185,15 @@ export const CreateAdModal = ({ games }: Props) => {
       </form>
     </DialogPortal>
   )
+}
+
+const style = {
+  formWrapper: `mt-2 md:mt-4 w-full max-w-[95vw] pb-[70px] md:max-w-[400px] flex flex-col gap-4`,
+  selectGameContainer: `flex flex-col gap-1 md:gap-2`,
+  select: `bg-zinc-900 appearance-none placeholder:text-zinc-500 focus:outline-none focus:ring focus:ring-violet-600 py-3 px-4 rounded text-sm`,
+  formItemContainer: `flex flex-col font-semibold gap-2`,
+  yearsPlayingAndDiscordWrapper: `grid grid-cols-2 gap-6`,
+  weekDaysAndHoursWrapper: `flex flex-col md:flex-row gap-6`,
+  toggleGroupContainer: `md:w-[180px] gap-2 md:gap-2 md:gap-x-4 flex flex-wrap`,
+  toggleItem: `w-8 h-8 font-normal rounded`,
 }

@@ -83,7 +83,7 @@ export const Ads = (props: Props) => {
           </h1>
           <span className="text-gray-400">Conecte-se e comece a jogar!</span>
         </div>
-        <div className="flex items-center flex-wrap justify-start">
+        <div className="flex items-center flex-wrap justify-center md:justify-start">
           {game !== undefined &&
           game.ads?.length !== undefined &&
           game.ads?.length > 0 ? (

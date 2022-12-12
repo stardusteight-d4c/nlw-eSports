@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 interface Props {
@@ -34,8 +34,6 @@ export const GameBanner = ({ game }: Props) => {
     </a>
   )
 }
-
-// className="object-fill line-clamp-2"
 
 const styles = {
   anchorCardContainer: `relative cursor-pointer min-h-[200px] max-h-[200px] md:min-h-[280px] md:max-h-[280px] rounded-lg overflow-hidden`,
