@@ -11,6 +11,7 @@ interface Game {
 interface Ad {
   createdAt: string
   discord: string
+  userEmail: string
   userImg: string
   gameId: string
   hourEnd: number

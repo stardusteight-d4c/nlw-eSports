@@ -1,16 +1,21 @@
-import { GameController } from 'phosphor-react'
+import { ArrowLeft, GameController, X } from 'phosphor-react'
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { ConnectModal } from '../components/modals/ConnectModal'
 import { DialogWrapper } from '../components/modals/integrate/DialogWrapper'
+import { useAppSelector } from '../store/hooks'
+import { selectUser } from '../store/userSlice'
 import { hostServer } from './Main'
-import logoEsports from '/assets/logo-esports.svg'
 
 interface Props {}
 
 export const Ads = (props: Props) => {
   const { game: slug } = useParams()
   const [game, setGame] = useState<Game>()
+  const navigate = useNavigate()
+  const currentUser = useAppSelector<User | null>(selectUser)
+
+  console.log(currentUser)
 
   useEffect(() => {
     const gameTitle = slug?.replaceAll('$25', ' ').replaceAll('$10', '/')
@@ -20,7 +25,16 @@ export const Ads = (props: Props) => {
       .catch((error) => console.log(error))
   }, [slug])
 
-  console.log(game)
+  const deleteAd = async (adId: string) => {
+    fetch(`${hostServer}/api/game/ads/deleteAdvertisement/${adId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(() => document.location.reload())
+      .catch((error) => console.log(error))
+  }
 
   const rendersWeekDays = (numberDay: string) => {
     const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
@@ -50,7 +64,12 @@ export const Ads = (props: Props) => {
 
   return (
     <div className={styles.wrapper}>
-      <div className="flex flex-col min-h-screen z-10 bg-[#2A2634] items-center justify-center rounded-md overflow-hidden w-full  py-4">
+      <div className="flex relative flex-col max-w-[1075px] min-h-screen z-10 bg-[#2A2634] items-center justify-center rounded-md overflow-hidden w-full  py-4">
+        <ArrowLeft
+          size={32}
+          onClick={() => navigate('/')}
+          className="text-xl absolute top-10 left-10 p-1 cursor-pointer"
+        />
         <div className="relative mt-8 w-24 h-24">
           <img
             src={game?.bannerUrl}
@@ -72,8 +91,15 @@ export const Ads = (props: Props) => {
               {game?.ads?.map((ad, index) => (
                 <div
                   key={index}
-                  className="max-w-[250px] mb-8 rounded-md mx-2 min-w-[250px] py-4 bg-[#2A2634]"
+                  className="max-w-[250px] relative mb-8 rounded-md mx-2 min-w-[250px] py-4 bg-[#2A2634]"
                 >
+                  {ad.userEmail === currentUser?.email && (
+                    <X
+                      size={18}
+                      className="absolute hover:text-red-500 transition-all duration-300 right-[42px] top-5 cursor-pointer text-zinc-500"
+                      onClick={() => deleteAd(ad.id)}
+                    />
+                  )}
                   <div className="mx-auto flex flex-col w-fit">
                     <div>
                       <span className="text-[#C4C4C6] font-medium mb-1">
@@ -81,7 +107,7 @@ export const Ads = (props: Props) => {
                       </span>
                       <div
                         title={ad.name}
-                        className="font-semibold truncate text-lg flex items-center gap-x-2"
+                        className="font-semibold truncate text-lg flex items-center cursor-pointer gap-x-2"
                       >
                         <img
                           src={ad.userImg}
@@ -95,7 +121,10 @@ export const Ads = (props: Props) => {
                         Tempo de jogo
                       </span>
                       <div className="font-semibold text-lg truncate w-[125px]">
-                        {ad.yearsPlaying} anos
+                        {ad.yearsPlaying}{' '}
+                        {(ad.yearsPlaying === 0 && '') ||
+                          (ad.yearsPlaying === 1 && 'ano') ||
+                          (ad.yearsPlaying > 1 && 'anos')}
                       </div>
                     </div>
                     <div className="my-2">
@@ -137,7 +166,9 @@ export const Ads = (props: Props) => {
               ))}
             </>
           ) : (
-            <span className='text-gray-500 text-4xl my-5'>Ainda não há anúncios</span>
+            <span className="text-gray-500 text-3xl my-5">
+              Ainda não há anúncios
+            </span>
           )}
         </div>
       </div>
@@ -146,5 +177,5 @@ export const Ads = (props: Props) => {
 }
 
 const styles = {
-  wrapper: `bg-[#2A2634] px-[225px] z-10 text-white w-screen mx-auto flex flex-col items-center justify-center`,
+  wrapper: `bg-[#2A2634] z-10 text-white w-screen mx-auto flex flex-col items-center justify-center`,
 }

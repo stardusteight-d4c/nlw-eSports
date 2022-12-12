@@ -147,6 +147,7 @@ export class GameController {
         data: {
           gameId,
           name: body.name,
+          userEmail: body.userEmail,
           userImg: body.userImg,
           yearsPlaying: body.yearsPlaying,
           discord: body.discord,
@@ -204,6 +205,25 @@ export class GameController {
         msg: error,
       })
     }
+  }
+
+  async deleteAdvertisement(req: Request, res: Response) {
+    const id = req.params.id
+
+    await prisma.ad
+      .delete({
+        where: {
+          id,
+        },
+      })
+      .then(() => res.status(200).json({ msg: 'Deleted item' }))
+      .catch((error) => {
+        console.error(error)
+        return res.status(500).json({
+          status: false,
+          msg: error,
+        })
+      })
   }
 
   async getAdvertisementDiscord(req: Request, res: Response) {

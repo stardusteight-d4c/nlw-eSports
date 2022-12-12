@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply font-inter antialiased scroll-smooth bg-[#121214] bg-galaxy bg-cover bg-no-repeat max-w-[100vw] min-h-screen;
+    @apply font-inter antialiased scroll-smooth bg-[#19181A] bg-galaxy bg-cover bg-no-repeat max-w-[100vw] min-h-screen;
   }
 
   ::-webkit-scrollbar {

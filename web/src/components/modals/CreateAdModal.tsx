@@ -29,13 +29,12 @@ export const CreateAdModal = ({ games }: Props) => {
     const formData = new FormData(event.target as HTMLFormElement)
     const data = Object.fromEntries(formData)
 
-    // fazer validação, autenticação, reponsividade e ajustes no layout
     if (!data.name) {
       return
     }
 
     try {
-      fetch(`${hostServer}/api/game/${data.game}/ads`, {
+      fetch(`${hostServer}/api/game/${data.gameId}/ads`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -43,6 +42,7 @@ export const CreateAdModal = ({ games }: Props) => {
         body: JSON.stringify({
           name: data.name,
           userImg: currentUser?.img,
+          userEmail: currentUser?.email,
           yearsPlaying: Number(data.yearsPlaying),
           discord: data.discord,
           weekDays: weekDays.map(Number),
@@ -61,14 +61,17 @@ export const CreateAdModal = ({ games }: Props) => {
 
   return (
     <DialogPortal title="Publique um anúncio">
-      <form onSubmit={handleCreateAd} className="mt-4 pb-[70px] max-w-[400px] flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
+      <form
+        onSubmit={handleCreateAd}
+        className="mt-2 md:mt-4 w-full max-w-[95vw] pb-[70px] md:max-w-[400px] flex flex-col gap-4"
+      >
+        <div className="flex flex-col gap-1 md:gap-2">
           <label htmlFor="game" className="font-semibold">
             Qual o game?
           </label>
           <select
             id="game"
-            name="game"
+            name="gameId"
             defaultValue=""
             className="bg-zinc-900 appearance-none placeholder:text-zinc-500 focus:outline-none focus:ring focus:ring-violet-600 py-3 px-4 rounded text-sm"
           >
@@ -109,12 +112,12 @@ export const CreateAdModal = ({ games }: Props) => {
             <Input name="discord" id="discord" placeholder="Usuario#0000" />
           </div>
         </div>
-        <div className="flex gap-6">
+        <div className="flex flex-col md:flex-row gap-6">
           <div className="flex flex-col gap-2">
             <label htmlFor="weekDays">Quando costuma jogar?</label>
             <ToggleGroup.Root
               type="multiple"
-              className="w-[180px] gap-2 gap-x-4 flex flex-wrap"
+              className="md:w-[180px] gap-2 md:gap-2 md:gap-x-4 flex flex-wrap"
               value={weekDays}
               onValueChange={setWeekDays}
             >
@@ -213,7 +216,7 @@ export const CreateAdModal = ({ games }: Props) => {
           Costumo me conectar ao chat de voz
         </label>
 
-        <footer className="mt-4 absolute bottom-[32px] right-[40px] flex justify-end gap-4">
+        <footer className="mt-4 absolute bottom-[20px] md:bottom-[32px] right-[25px] md:right-[40px] flex justify-end gap-4">
           <Dialog.Close
             type="button"
             className="bg-zinc-500 transition-all duration-200 hover:bg-zinc-600 px-5 h-12 rounded-md font-semibold"

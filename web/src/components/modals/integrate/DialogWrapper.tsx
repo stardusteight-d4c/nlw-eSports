@@ -17,5 +17,5 @@ export const DialogWrapper = ({ children, modal }: Props) => {
 }
 
 const style = {
-  triggerButton: `py-3 hover:bg-violet-600 justify-center transition-all duration-200 flex items-center gap-3 px-4 font-medium bg-violet-500 text-white rounded-md`,
+  triggerButton: `py-3 hover:bg-violet-600 justify-center w-full md:w-fit transition-all duration-200 flex items-center gap-3 px-4 font-medium bg-violet-500 text-white rounded-md`,
 }

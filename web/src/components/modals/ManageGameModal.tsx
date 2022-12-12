@@ -104,7 +104,7 @@ export const ManageGameModal = () => {
 
   return (
     <DialogPortal title={rendersTitle()}>
-      <div className="pb-20 max-w-[400px]">
+      <div className="pb-20 w-full max-w-[95vw] md:max-w-[400px]">
         <div className="space-x-2 mt-1">
           <span
             onClick={() => {
@@ -150,7 +150,7 @@ export const ManageGameModal = () => {
         <form
           onSubmit={handleSubmit}
           autoComplete="off"
-          className="mt-4 flex items-center justify-center gap-4"
+          className="mt-4 flex flex-col md:flex-row items-center justify-center gap-4"
         >
           <div className="space-y-5">
             <div className="flex flex-col space-y-[73px] relative gap-y-2">
@@ -243,7 +243,7 @@ export const ManageGameModal = () => {
               <div className="max-w-[140px] min-w-[140px] min-h-[200px] max-h-[200px] border border-dashed" />
             )}
           </div>
-          <footer className="mt-4 absolute bottom-[32px] right-[40px] flex justify-end gap-4">
+          <footer className="mt-4 absolute bottom-[32px] right-[30px] md:right-[40px] flex justify-end gap-4">
             <Dialog.Close
               type="button"
               id="cancel"

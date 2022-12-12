@@ -32,7 +32,7 @@ export const Search = ({ setGames, setTerm, setPage }: Props) => {
         onChange={(e) => handleSearch(e)}
         type='text'
         placeholder='Procure por um game'
-        className='bg-[#2a2634] brightness-105 placeholder:text-zinc-500 focus:ring-2 focus:ring-violet-600 text-white px-10 py-2 shadow-md rounded-md outline-none w-[400px]'
+        className='bg-[#2a2634] brightness-105 placeholder:text-zinc-500 focus:ring-2 focus:ring-violet-600 text-white px-10 py-2 shadow-md rounded-md outline-none w-[95vw] md:w-[400px]'
       />
     </div>
   )

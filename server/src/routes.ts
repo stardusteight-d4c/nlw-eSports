@@ -15,5 +15,6 @@ router.get('/searchGameByTitle', game.searchGameByTitle)
 router.post('/addGame', game.addGame)
 router.put('/updateGame', game.updateGame)
 router.delete('/deleteGame', game.deleteGame)
+router.delete('/ads/deleteAdvertisement/:id', game.deleteAdvertisement)
 
 export { router }
