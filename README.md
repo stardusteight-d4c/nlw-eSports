@@ -12,7 +12,6 @@
 :arrow_right: Express Controller Class with Prisma Client <br /> 
 :arrow_right: Redux Toolkit and Google Auth Provider <br /> 
 :arrow_right: Radix UI Components <br /> 
-:arrow_right: Pagination Component <br /> 
 
 <br />
 
