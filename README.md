@@ -40,6 +40,8 @@ In order to successfully complete this guide, you need:
 
 <i>Make sure you have your database connection URL at hand.</i> <br />
 
+<br />
+
 ### Configuring replica set locally
 
 #### Replication in MongoDB
@@ -151,7 +153,7 @@ From mongosh, run `rs.initiate()` on replica set member 0.
  - `npm init -y`
  - `npm install typescript ts-node @types/node --save-dev`
 
- - `touch tsconfig.json`
+ - `touch tsconfig.json` or `npx tsc --init` to generate the tsconfig.json file:
 
 ```json
 {
