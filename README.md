@@ -499,6 +499,7 @@ As you can see, the `useEffect` of `App.tsx` is not responsible for logging or l
 
 ```tsx
 // src/page/Main.tsx
+
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { auth } from '../firebase'
 import { useAppSelector } from '../store/hooks'
