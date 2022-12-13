@@ -9,7 +9,7 @@
 > games through the frontend of the application, pagination, and the main feature of creating ads and deleting them whenever you want on the ad page.
 
 :arrow_right: Prisma ORM | Integration with MongoDB <br /> 
-:arrow_right: Controller Class with Typescript <br /> 
+:arrow_right: Express Controller Class with Prisma Client <br /> 
 :arrow_right: Redux Toolkit and Google Auth Provider <br /> 
 :arrow_right: Radix UI Components <br /> 
 :arrow_right: Pagination Component <br /> 
@@ -188,3 +188,131 @@ This command creates the Prisma client that gives type-safe access to our databa
 
 *<i>prisma.io</i>  <br />
 *<i>mongodb.com/docs/manual/tutorial/deploy-replica-set</i>  <br />
+
+<br />
+
+## Express Controller Class with Prisma Client
+
+Express is a framework for Node.js used to build the `backend for web applications`. It is `unopinionated`, meaning that you can use it in a manner in which you see fit. In this tutorial, I present a way that works for me while working with the TypeScript Express.
+
+After starting your project with the required dependencies, to run our project, we need to add a script in our `package.json`:
+
+```json
+"scripts": {
+  "build": "tsc",
+  "dev": "tsnd --exit-child src/server.ts"
+},
+```
+
+As you can see, our app starts at the `server.ts` file in the `src` directory. Let’s start with the basics:
+
+```ts
+import express from 'express'
+import cors from 'cors'
+import dotenv from 'dotenv'
+import { router } from './routes'
+
+dotenv.config()
+
+const app = express()
+app.use(
+  cors({
+    origin: process.env.ORIGIN,
+  })
+)
+
+app.use(cors())
+app.use(express.json())
+app.use('/api/game', router)
+
+app.listen(process.env.PORT, () => {
+  console.log(`Server listening on PORT: ${process.env.PORT}`)
+})
+```
+
+ - <strong>dotenv.config()</strong> - Loads environment variables from .env file.
+ - <strong>express()</strong> - Creates the Express application that we are going to interact with.
+ - <strong>app.use(cors())</strong> - CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
+ - <strong>express.json()</strong> - Is a built in middleware function in Express starting from v4.16.0. It parses incoming JSON requests and puts the parsed data in req.body.
+ - <strong>app.use('/api/game', router)</strong> - Mount the router as middleware at path /api/game.
+ - <strong>app.listen()</strong> - Function that does the app listen for a connection on the specified port. 
+ 
+*<i>Use the express.Router class to create modular, mountable route handlers. A Router instance is a complete middleware and routing system; for this reason, it is often referred to as a "mini-app".</i> <br />
+ 
+*<i>Cross-origin resource sharing (CORS) is a mechanism that allows restricted resources on a web page to be requested from another domain outside the domain from which the first resource was served.</i> <br />
+
+### Middleware
+
+Middleware functions have access to the `request and response objects`. `It can attach to any place in the request-response cycle`. A third argument that middleware receives is the `next function`. When called, `the next middleware in the chain is executed`. An example of a middleware is the get callback that handles the HTTP GET request that we’ve written above. It is a very specific middleware that executes on a particular case. They can also perform more generic tasks. Let’s create a very simple logger middleware that will `log to console what requests were made`.
+
+```ts
+import * as express from 'express';
+ 
+function loggerMiddleware(request: express.Request, response: express.Response, next) {
+  console.log(`${request.method} ${request.path}`);
+  next();
+}
+ 
+const app = express();
+ 
+app.use(loggerMiddleware);
+ 
+app.get('/hello', (request, response) => {
+  response.send('Hello world!');
+});
+ 
+app.listen(5000);
+```
+
+### Controllers
+
+A common way to structure an Express application is called `Model-View-Controller`. Some of the main components of MVC are `controllers`. They contain the `application logic and handle handling client requests`. Since we're covering TypeScript with Express, we use classes.
+
+```ts
+// server/src/controllers/game.ts
+
+export class GameController {
+  async addGame(req: Request, res: Response) {
+    const { title, bannerUrl } = req.body
+
+    await prisma.game
+      .create({
+        data: {
+          title: title,
+          bannerUrl: bannerUrl,
+        },
+      })
+      .then((game) => res.status(201).json(game))
+      .catch((error) => {
+        console.error(error)
+        return res.status(500).json({
+          status: false,
+          msg: error,
+        })
+      })
+  }
+  // ...
+}
+```
+
+As we are using Prisma and TypeScript, we obtain its auto complete which allows us to identify the schemas in the database and their tables, even if you try to add a non-existent property to the database you will already receive a compilation error.
+
+To call your controller methods as a callback function in Express routing, we must first instantiate our controller by assigning it to a variable, and then we will have access to its methods:
+
+```ts
+// server/src/routes.ts
+import { Router } from 'express'
+import { GameController } from './controllers/game'
+
+const router = Router()
+
+const game = new GameController()
+
+router.get('/games/:page', game.getGames)
+// ...
+```
+
+In addition to taking advantage of the PrismaClient instance to read and write in our application's database, we could have created countless ways to keep our controller even more robust and easy to maintain, such as typing the body of requests.
+
+*<i>wanago.io/2018/12/03/typescript-express-tutorial-routing-controllers-middleware</i> <br />
+
