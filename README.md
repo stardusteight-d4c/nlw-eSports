@@ -316,3 +316,247 @@ In addition to taking advantage of the PrismaClient instance to read and write i
 
 *<i>wanago.io/2018/12/03/typescript-express-tutorial-routing-controllers-middleware</i> <br />
 
+<br />
+
+## Redux Toolkit and Google Auth Provider
+
+Redux Toolkit is a `state management` library, it is most commonly used with libraries like React or Angular to create `user interfaces`. In this application, Redux was used only to store the user's login state, that is, if the user is logged in or not, if so, we also obtain some data provided by the Google authentication provider to identify the user, such as the email for example .
+
+### Authentication with Firebase
+
+> Firebase is an `app development platform` that helps you build and develop apps and games that users love. Backed by Google and trusted by millions of businesses around the world.
+
+Most applications need to know a user's identity. Knowing a user's identity allows an app to securely save the user's data in the cloud and provide the same personalized experience across all of the user's devices.
+
+`Firebase Authentication` offers easy-to-use `backend services`, `Software Development Kit)` and ready-made UI libraries to authenticate users in your application. It supports authentication using passwords, phone numbers, popular federated identity providers like Google, Facebook and Twitter, and more.
+
+1. <strong>Create a project in Firebase and go to SDK settings.</strong>
+
+ - If you are already using npm and a module bundler such as webpack or Rollup, run the following command to install the latest SDK:
+ 
+ - `npm install firebase`
+ 
+2. <strong>Then launch Firebase and start using product SDKs.</strong>
+
+```ts
+// src/firebase.ts
+
+import { initializeApp } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyB4mk2ac4qlgzNYYl-qHVnI2nKeTr3w1yw',
+  authDomain: 'eminent-scanner-370818.firebaseapp.com',
+  projectId: 'eminent-scanner-370818',
+  storageBucket: 'eminent-scanner-370818.appspot.com',
+  messagingSenderId: '415456423398',
+  appId: '1:415456423398:web:4bad88cce168cd7e107a27',
+}
+
+const app = initializeApp(firebaseConfig)
+const auth = getAuth(app)
+
+export { auth }
+```
+
+*<i>Remember to enable the sign-in method in `Authentication` in your app in firebase and later define a provider, in this case the chosen one was Google.</i> <br />
+
+3. <strong>Configuring Redux Toolkit Store with TypeScript.</strong>
+
+ - `npm i react-redux @reduxjs/toolkit`
+ 
+The `store` is the gateway for managing the states of our application, `each data in the store must have its own reducer` (it is in charge of handling all actions and specifies the state of the application), you must assign a slice to your application's reducer (which is, as the name implies, a piece of your application's state), as we will create the user's authentication state and this data will contain some data to identify the user, we pass the `reducer from userSlice` to the `store`:
+ 
+```ts
+// src/store/index.ts
+
+import { configureStore } from '@reduxjs/toolkit'
+import { userSlice } from './userSlice'
+
+export const store = configureStore({
+  reducer: {
+    userSlice: userSlice.reducer,
+  },
+})
+
+// Infer the `RootState` and `AppDispatch` types from the store itself
+export type RootState = ReturnType<typeof store.getState>
+// Inferred type: { userSlice: userSliceState }
+export type AppDispatch = typeof store.dispatch
+```
+
+ - Define Typed Hooks
+
+```ts
+// src/store/hooks.ts
+
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '.'
+
+// Use throughout your app instead of plain `useDispatch` and `useSelector`
+export const useAppDispatch: () => AppDispatch = useDispatch
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+```
+
+- We create the state of the `user` which will start as `null` when calling the `login method` the state will become the value that comes in `action.payload`, and to log out a user we create the logout reducer, which will set the user state to `null` again:
+
+```ts
+// src/store/userSlice.ts
+
+import { createSlice } from '@reduxjs/toolkit'
+import { RootState } from '.'
+
+const initialState = {
+  user: null,
+}
+
+export const userSlice = createSlice({
+  name: 'userSlice',
+  initialState,
+  reducers: {
+    login: (state, action) => {
+      state.user = action.payload
+    },
+    logout: (state) => {
+      state.user = null
+    },
+  },
+})
+
+export const { login, logout } = userSlice.actions
+export const selectUser = (state: RootState) => state.userSlice.user
+```
+
+- Don't forget to envelop your application with the store provider, so your entire application will have access to the store:
+
+```tsx
+// src/main.tsx
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { Provider } from 'react-redux'
+import { BrowserRouter } from 'react-router-dom'
+import { App } from './App'
+import { store } from './store'
+import './styles/main.css'
+
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </React.StrictMode>
+)
+```
+
+4. Connecting user to application with Firebase and Redux
+
+Reinforcing that it is not necessary to use Redux to integrate authentication with Firebase, but it was the approach I chose for this application. Therefore, after performing all the necessary configurations, we can now use these libraries to authenticate the user and store this state in the application.
+
+Firstly firebase has a very convenient function from its `auth SDK` which is `onAuthStateChanged`, `onAuthStateChanged` adds a watcher for changes in user input state:
+
+```tsx
+// src/App.tsx
+
+import { onAuthStateChanged } from 'firebase/auth'
+import { useEffect } from 'react'
+import { Route, Routes } from 'react-router-dom'
+import { auth } from './firebase'
+import { Ads, Main } from './pages'
+import { useAppDispatch } from './store/hooks'
+import { login, logout } from './store/userSlice'
+
+export const App = () => {
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      user
+        ? dispatch(
+            login({
+              uid: user.uid,
+              email: user.email,
+              name: user.displayName,
+              img: user.photoURL,
+            }),
+          )
+        : dispatch(logout())
+    })
+  }, [])
+
+  return (
+    <Routes>
+      <Route path="/" element={<Main />} />
+      <Route path="/ads/:game" element={<Ads />} />
+    </Routes>
+  )
+}
+```
+
+As you can see, the `useEffect` of `App.tsx` is not responsible for logging or logging out a user, but only for saving the authentication state. `auth` from our application defined in `firebase.ts`:
+
+```tsx
+// src/page/Main.tsx
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { auth } from '../firebase'
+import { useAppSelector } from '../store/hooks'
+import { selectUser } from '../store/userSlice'
+// ...
+
+const provider = new GoogleAuthProvider()
+
+export const Main = (props: Props) => {
+ const currentUser = useAppSelector<User | null>(selectUser)
+
+ useEffect(() => {
+   fetch('./admins.json')
+     .then((res) => res.json())
+     .then((data) => setAdmins(data.admins))
+     .catch((error) => console.log(error))
+ }, [currentUser])
+
+ const isUserAdmin = () => {
+  return currentUser && admins?.includes(currentUser.email)
+ }
+
+ const rendersDashboard = () => (
+  <>
+    {currentUser ? (
+      <div className={style.buttonsWrapper}>
+        <button
+          type="button"
+          onClick={() => auth.signOut()}
+          className={style.buttonGoogleLogout}
+        >
+          <GoogleLogo />
+          Sair
+        </button>
+        {isUserAdmin() && (
+          <DialogWrapper modal={<ManageGameModal />}>
+            <PlusCircle size={24} />
+            <span>Gerenciar game</span>
+          </DialogWrapper>
+        )}
+        <DialogWrapper modal={<CreateAdModal games={games} />}>
+          <MagnifyingGlassPlus size={24} />
+          <span>Publicar anúncio</span>
+        </DialogWrapper>
+      </div>
+    ) : (
+      <button
+        type="button"
+        onClick={() => signInWithPopup(auth, provider)}
+        className={style.buttonGoogleSignIn}
+      >
+        <GoogleLogo />
+        Entre com o Google
+      </button>
+    )}
+  </>
+ )
+	
+// ...
+```
+
