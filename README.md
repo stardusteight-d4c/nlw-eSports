@@ -42,7 +42,7 @@ In order to successfully complete this guide, you need:
 
 ### Configuring replica set locally
 
-- Replication in MongoDB
+#### Replication in MongoDB
 
 A replica set in MongoDB `is a group of mongod processes that maintain the same data set`. Replica sets `provide redundancy and high availability`, and are the basis for all production deployments. 
 
@@ -142,6 +142,8 @@ From mongosh, run `rs.initiate()` on replica set member 0.
 
  - `rs.initiate()`
 
+<br />
+
 ### Starting Project with Prisma
 
 1. <strong>Now, initialize a TypeScript project using npm:</strong>
@@ -166,7 +168,6 @@ From mongosh, run `rs.initiate()` on replica set member 0.
  - `npm install prisma --save-dev`
  - `npx prisma init`
 
-
 2. <strong>Model your data in the Prisma schema</strong>
 
 Don't forget to add your `Connection URL` to MongoDB in the `.env` file.
@@ -179,8 +180,7 @@ So rather than running prisma migrate command we can use following command
 
  - `npx prisma generate`
 
-This command creates the Prisma client that gives type-safe access to our database.
-
+This command creates the Prisma client that gives type-safe access to our database, finally you can visualize the database with:
 
 - `npx prisma studio`
 
