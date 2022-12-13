@@ -451,7 +451,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 )
 ```
 
-4. Connecting user to application with Firebase and Redux
+4. <strong>Connecting user to application with Firebase and Redux.</strong>
 
 Reinforcing that it is not necessary to use Redux to integrate authentication with Firebase, but it was the approach I chose for this application. Therefore, after performing all the necessary configurations, we can now use these libraries to authenticate the user and store this state in the application.
 
