@@ -11,7 +11,7 @@
 :arrow_right: Prisma ORM | Integration with MongoDB <br /> 
 :arrow_right: Express Controller Class with Prisma Client <br /> 
 :arrow_right: Redux Toolkit and Google Auth Provider <br /> 
-:arrow_right: Radix UI Components <br /> 
+:arrow_right: Radix UI | Why waste time reinventing UI components? <br /> 
 
 <br />
 
@@ -559,4 +559,107 @@ export const Main = (props: Props) => {
 	
 // ...
 ```
+
+<br />
+
+## Radix UI | Why waste time reinventing UI components?
+
+> Unstyled, accessible components for building high‑quality design systems and web apps in React
+
+A component library provides a centralized and managed repository of components for reuse, `one of the greatest purposes of component libraries is to bring more agility to the development of user interfaces`, creating a component can be much more complex than it seems, for example the modal in this application, you would have to think about how you would manage the state of your modal, accessibility, what would be the rendering logic of this component, where would such logic be in your code and among other possibilities.
+
+All web components basically have the same behavior, you don't need to think about how a modal, popover or a slider will behave, for example, there are already ready-made libraries made to make these implementations easy to implement, in addition to guaranteeing the better usability for the user.
+
+Let's look at an example Radix UI component in the application:
+
+```tsx
+// src/components/modals/CreateAdModal.tsx
+
+import * as Checkbox from '@radix-ui/react-checkbox'
+
+<span className={style.checkContainer}>
+  <Checkbox.Root
+    onCheckedChange={() => setUseVoiceChannel(!useVoiceChannel)}
+    className={style.checkBoxContainer}
+  >
+    <Checkbox.Indicator>
+      <Check className={style.checkBox} />
+    </Checkbox.Indicator>
+  </Checkbox.Root>
+  Costumo me conectar ao chat de voz
+</span>
+```
+
+Note that we don't need to worry about rendering logic, just details of how to implement the component in our project and styling, component logic and accessibility are in charge of the library. Of course, a checkbox is a simple component, so let's see the example of a modal, in this case I separated the rendering responsibilities into different components:
+
+```tsx
+// src/pages/Main.tsx
+
+{isUserAdmin() && (
+  <DialogWrapper modal={<ManageGameModal />}>
+    <PlusCircle size={24} />
+    <span>Gerenciar game</span>
+  </DialogWrapper>
+)}
+
+``` 
+
+```tsx
+// src/components/modals/integrate/DialogWrapper.tsx
+
+import * as Dialog from '@radix-ui/react-dialog'
+
+interface Props {
+  children: JSX.Element | JSX.Element[]
+  modal: JSX.Element
+}
+
+export const DialogWrapper = ({ children, modal }: Props) => {
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger className={style.triggerButton}>
+        {children}
+      </Dialog.Trigger>
+      {modal}
+    </Dialog.Root>
+  )
+}
+
+const style = {
+  triggerButton: `py-3 hover:bg-violet-600 justify-center w-full md:w-fit transition-all duration-200 flex items-center gap-3 px-4 font-medium bg-violet-500 text-white rounded-md`,
+}
+
+```
+
+The `children` property that `DialogWrapper` receives is responsible for being the trigger that will open the modal, and the modal will open right after `Dialog.Trigger`, simple, no? But the modal also has predefined behaviors, and Radix UI provides these behaviors, which I built a separate component that will envelop the modal, assigning it the behaviors of a modal, all without having to build different global states or pass parent-to-child props and have all rendering responsibility built into the application:
+
+```tsx
+// src/components/modals/integrate/DialogPortal.tsx
+
+import * as Dialog from '@radix-ui/react-dialog'
+
+interface Props {
+  title?: string
+  children: JSX.Element | JSX.Element[]
+}
+
+export const DialogPortal = ({ title, children }: Props) => {
+  return (
+    <Dialog.Portal>
+      <Dialog.Overlay className={style.overlay} />
+      <Dialog.Content className={style.content}>
+        <Dialog.Title className={style.title}>{title}</Dialog.Title>
+        {children}
+      </Dialog.Content>
+    </Dialog.Portal>
+  )
+}
+
+const style = {
+  overlay: `bg-black/60 inset-0 fixed z-20`,
+  content: `fixed z-50 w-[95vw] md:w-fit py-4 px-8 md:h-fit bg-[#2A2634] md:py-8 md:px-10 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-md shadow-black/25`,
+  title: `text-xl md:text-3xl font-black`,
+}
+``` 
+
 
