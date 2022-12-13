@@ -20,22 +20,22 @@ export const GameBanner = ({ game }: Props) => {
   return (
     <a
       onClick={() => navigate(`/ads/${slug}`)}
-      className={styles.anchorCardContainer}
+      className={style.anchorCardContainer}
     >
       <img
         src={game.bannerUrl}
         alt={`game/${game.title}`}
-        className={styles.img}
+        className={style.img}
       />
-      <div className={styles.infoOfCardWithOverlay}>
-        <strong className={styles.gameTitle}>{game.title}</strong>
-        <span className={styles.adsQuantity}>{game._count.ads} Anúncio(s)</span>
+      <div className={style.infoOfCardWithOverlay}>
+        <strong className={style.gameTitle}>{game.title}</strong>
+        <span className={style.adsQuantity}>{game._count.ads} Anúncio(s)</span>
       </div>
     </a>
   )
 }
 
-const styles = {
+const style = {
   anchorCardContainer: `relative cursor-pointer min-h-[200px] max-h-[200px] md:min-h-[280px] md:max-h-[280px] rounded-lg overflow-hidden`,
   img: `w-full h-full object-fill`,
   infoOfCardWithOverlay: `w-full pt-16 pb-4 px-4 absolute bottom-0 inset-x-0 bg-gradient-to-b from-black/0 via-black/60 to-black/90`,

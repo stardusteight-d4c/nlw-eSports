@@ -129,6 +129,7 @@ export const ManageGameModal = () => {
     },
     name: 'title',
     placeholder: activeItem === 'add' ? 'Nome do game' : 'Procurar game',
+    className: '!pr-7',
   }
 
   const inputPosterProps = {

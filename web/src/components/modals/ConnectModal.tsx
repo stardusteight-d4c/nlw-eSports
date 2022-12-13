@@ -32,29 +32,17 @@ export const ConnectModal = ({ userDiscord }: Props) => {
     <div ref={wrapperRef}>
       <DialogPortal>
         <Dialog.Close>
-          <X
-            size={24}
-            className="absolute right-5 top-5 cursor-pointer text-zinc-500"
-          />
+          <X size={24} className={style.xCloseIcon} />
         </Dialog.Close>
-        <div className="flex flex-col items-center justify-center w-[250px]">
-          <CheckCircle size={68} className="text-emerald-400" />
-          <div className="text-center my-5">
-            <h1 className="text-3xl font-semibold">Let's play!</h1>
-            <span className="text-gray-400 inline-block mt-1">
-              Agora é só começar a jogar!
-            </span>
+        <div className={style.wrapperContent}>
+          <CheckCircle size={68} className={style.checkCircle} />
+          <div className={style.titleContainer}>
+            <h1 className={style.title}>Let's play!</h1>
+            <span className={style.spanTitle}>Agora é só começar a jogar!</span>
           </div>
-          <div className="flex flex-col items-center">
-            <h2 className="text-xl font-medium">Adicione no Discord</h2>
-            <div
-              title="Clique para copiar!"
-              onClick={() => {
-                navigator.clipboard.writeText(userDiscord)
-                setCopied(true)
-              }}
-              className="py-3 relative px-11 bg-zinc-900 rounded-md text-center mt-2"
-            >
+          <div className={style.addContainer}>
+            <h2 className={style.addTitle}>Adicione no Discord</h2>
+            <div className={style.userDiscordContainer}>
               <CopySimple
                 size={18}
                 onClick={(e) => {
@@ -62,20 +50,34 @@ export const ConnectModal = ({ userDiscord }: Props) => {
                   navigator.clipboard.writeText(userDiscord)
                   setCopied(true)
                 }}
-                className={`${
-                  copied ? 'text-green-500' : 'text-zinc-400'
-                } absolute right-2 top-[14px]  cursor-pointer`}
+                className={`${copied ? 'text-green-500' : 'text-zinc-400'} ${
+                  style.copyTextIcon
+                }`}
               />
               {userDiscord}
-            {copied && (
-              <span className="text-sm w-[115%] text-gray-500 mt-1 absolute -bottom-5 -left-3">
-                Copiado para area de transferência!
-              </span>
-            )}
+              {copied && (
+                <span className={style.copiedSpan}>
+                  Copiado para area de transferência!
+                </span>
+              )}
             </div>
           </div>
         </div>
       </DialogPortal>
     </div>
   )
+}
+
+const style = {
+  xCloseIcon: `absolute right-5 top-5 cursor-pointer text-zinc-500`,
+  wrapperContent: `flex pb-4 flex-col items-center justify-center mx-auto w-[250px]`,
+  checkCircle: `text-emerald-400`,
+  titleContainer: `text-center my-5`,
+  title: `text-3xl font-semibold`,
+  spanTitle: `text-gray-400 inline-block mt-1`,
+  addContainer: `flex flex-col items-center`,
+  addTitle: `text-xl font-medium`,
+  userDiscordContainer: `py-3 relative px-11 bg-zinc-900 rounded-md text-center mt-2`,
+  copyTextIcon: `absolute right-2 top-[14px]  cursor-pointer`,
+  copiedSpan: `text-sm w-[155%] inline-block text-gray-500 mt-1 absolute -bottom-6 -left-11`,
 }

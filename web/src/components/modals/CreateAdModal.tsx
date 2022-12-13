@@ -29,10 +29,6 @@ export const CreateAdModal = ({ games }: Props) => {
     const formData = new FormData(event.target as HTMLFormElement)
     const data = Object.fromEntries(formData)
 
-    if (!data.name) {
-      return
-    }
-
     try {
       fetch(`${hostServer}/api/game/${data.gameId}/ads`, {
         method: 'POST',
@@ -51,12 +47,42 @@ export const CreateAdModal = ({ games }: Props) => {
           useVoiceChannel: useVoiceChannel,
         }),
       })
-
       alert('Anúncio criado com sucesso!')
     } catch (error) {
       alert('Erro ao criar o anúncio!')
       console.error(error)
     }
+  }
+
+  const inputProps = {
+    name: {
+      id: 'name',
+      name: 'name',
+      placeholder: 'Como te chamam dentro do game?',
+    },
+    yearsPlaying: {
+      name: 'yearsPlaying',
+      id: 'yearsPlaying',
+      type: 'number',
+      placeholder: 'Tudo bem ser ZERO',
+    },
+    discord: {
+      name: 'discord',
+      id: 'discord',
+      placeholder: 'Usuario#0000',
+    },
+    hourStart: {
+      name: 'hourStart',
+      id: 'hourStart',
+      type: 'time',
+      placeholder: 'De',
+    },
+    hourEnd: {
+      name: 'hourEnd',
+      id: 'hourEnd',
+      type: 'time',
+      placeholder: 'Até',
+    },
   }
 
   const rendersToggleItems = () => {
@@ -83,6 +109,19 @@ export const CreateAdModal = ({ games }: Props) => {
     ))
   }
 
+  const rendersOptions = () => (
+    <select id="game" name="gameId" className={style.select}>
+      <option disabled>Selecione o game que deseja jogar</option>
+      {games.map((game) => {
+        return (
+          <option key={game.id} value={game.id}>
+            {game.title}
+          </option>
+        )
+      })}
+    </select>
+  )
+
   return (
     <DialogPortal title="Publique um anúncio">
       <form onSubmit={handleCreateAd} className={style.formWrapper}>
@@ -90,40 +129,22 @@ export const CreateAdModal = ({ games }: Props) => {
           <label htmlFor="game" className="font-semibold">
             Qual o game?
           </label>
-          <select id="game" name="gameId" className={style.select}>
-            <option disabled>Selecione o game que deseja jogar</option>
-            {games.map((game) => {
-              return (
-                <option key={game.id} value={game.id}>
-                  {game.title}
-                </option>
-              )
-            })}
-          </select>
+          {rendersOptions()}
         </div>
         <div className={style.formItemContainer}>
           <label htmlFor="name" className="font-semibold">
             Seu nome (ou nickname)
           </label>
-          <Input
-            id="name"
-            name="name"
-            placeholder="Como te chamam dentro do game?"
-          />
+          <Input {...inputProps.name} />
         </div>
         <div className={style.yearsPlayingAndDiscordWrapper}>
           <div className={style.formItemContainer}>
             <label htmlFor="yearsPlaying">Joga há quantos anos?</label>
-            <Input
-              name="yearsPlaying"
-              id="yearsPlaying"
-              type="number"
-              placeholder="Tudo bem ser ZERO"
-            />
+            <Input {...inputProps.yearsPlaying} />
           </div>
           <div className={style.formItemContainer}>
             <label htmlFor="discord">Qual seu Discord?</label>
-            <Input name="discord" id="discord" placeholder="Usuario#0000" />
+            <Input {...inputProps.discord} />
           </div>
         </div>
         <div className={style.weekDaysAndHoursWrapper}>
@@ -140,45 +161,28 @@ export const CreateAdModal = ({ games }: Props) => {
           </div>
           <div className={`${style.formItemContainer} flex-1`}>
             <label htmlFor="hourStart">Qual horário do dia?</label>
-            <div className="grid grid-cols-2 gap-2">
-              <Input
-                name="hourStart"
-                id="hourStart"
-                type="time"
-                placeholder="De"
-              />
-              <Input
-                name="hourEnd"
-                id="hourEnd"
-                type="time"
-                placeholder="Até"
-              />
+            <div className={style.hoursStartAndEndWrapper}>
+              <Input {...inputProps.hourStart} />
+              <Input {...inputProps.hourEnd} />
             </div>
           </div>
         </div>
-        <label className="mt-2 flex items-center gap-2 text-sm">
+        <span className={style.checkContainer}>
           <Checkbox.Root
             onCheckedChange={() => setUseVoiceChannel(!useVoiceChannel)}
-            className="w-6 h-6 p-1 rounded bg-zinc-900"
+            className={style.checkBoxContainer}
           >
             <Checkbox.Indicator>
-              <Check className="w-4 h-4 font-bold text-emerald-400" />
+              <Check className={style.checkBox} />
             </Checkbox.Indicator>
           </Checkbox.Root>
           Costumo me conectar ao chat de voz
-        </label>
-
-        <footer className="mt-4 absolute bottom-[20px] md:bottom-[32px] right-[25px] md:right-[40px] flex justify-end gap-4">
-          <Dialog.Close
-            type="button"
-            className="bg-zinc-500 transition-all duration-200 hover:bg-zinc-600 px-5 h-12 rounded-md font-semibold"
-          >
+        </span>
+        <footer className={style.footerContainer}>
+          <Dialog.Close type="button" className={style.buttonCloseModal}>
             Cancelar
           </Dialog.Close>
-          <button
-            type="submit"
-            className="bg-violet-500 transition-all duration-200 hover:bg-violet-600 px-5 h-12 rounded-md font-semibold flex items-center gap-3"
-          >
+          <button type="submit" className={style.buttonSubmit}>
             <GameController size={24} /> Encontrar duo
           </button>
         </footer>
@@ -196,4 +200,11 @@ const style = {
   weekDaysAndHoursWrapper: `flex flex-col md:flex-row gap-6`,
   toggleGroupContainer: `md:w-[180px] gap-2 md:gap-2 md:gap-x-4 flex flex-wrap`,
   toggleItem: `w-8 h-8 font-normal rounded`,
+  hoursStartAndEndWrapper: `grid grid-cols-2 gap-2`,
+  checkContainer: `mt-2 flex items-center gap-2 text-sm`,
+  checkBoxContainer: `w-6 h-6 p-1 rounded bg-zinc-900`,
+  checkBox: `w-4 h-4 font-bold text-emerald-400`,
+  footerContainer: `mt-4 absolute bottom-[20px] md:bottom-[32px] right-[25px] md:right-[40px] flex justify-end gap-4`,
+  buttonCloseModal: `bg-zinc-500 transition-all duration-200 hover:bg-zinc-600 px-5 h-12 rounded-md font-semibold`,
+  buttonSubmit: `bg-violet-500 transition-all duration-200 hover:bg-violet-600 px-5 h-12 rounded-md font-semibold flex items-center gap-3`,
 }
