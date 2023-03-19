@@ -1,51 +1,75 @@
-# NLW eSports | Prisma ORM & TypeScript
+<div align="center">
+  <img src="logo.png" width="222" height="78" />
+</div>
 
-![banner](banner.png)
+<h1 align="center">
+ NLW eSports, Find Your Duo
+</h1>
 
-> Project made at `NLW (Next Level Week)`, an online event held by Rocketseat. In this project taught by Diego Schell Fernandes,
-> the ORM Prisma was presented for the development of APIs in the backend, as well as the importance of `TypeScript` (a super set of the
-> JavaScript to leave your code statically typed in both the backend and frontend of the application). From the base project made in this event
-> added some new features to make the project more functional, like login with Google, admins can add, edit and delete
-> games through the frontend of the application, pagination, and the main feature of creating ads and deleting them whenever you want on the ad page.
+This application is aimed at the gamer universe and allows users to connect to find partners for online games. Users can log in and post ads to find a partner or search through game ads to find a suitable partner. The ads form collects information about the game, what time the user is available to play and also provides the user's Discord so that they can easily connect with people who are looking for game partners at the same time.
 
-:arrow_right: Prisma ORM | Integration with MongoDB <br /> 
-:arrow_right: Express Controller Class with Prisma Client <br /> 
-:arrow_right: Redux Toolkit and Google Auth Provider <br /> 
-:arrow_right: Radix UI | Why waste time reinventing UI components? <br /> 
+In the frontend, technologies such as React, TypeScript, Fetch API, Radix UI, Firebase and TailwindCSS were used, which allow users to interact with the application's interface in a pleasant and intuitive way. Vite was used to compile and run the application.
 
-<br />
+In the backend, technologies such as Node.js, TypeScript, Prisma and Express were used, which allow the application to process user requests and interact with the database efficiently. Prisma was used as the ORM for the database and Express to create the API routes.
 
-## Prisma ORM | Integration with MongoDB
+With this application, players can easily find online gaming partners and enjoy their favorite games even more.
 
-Prisma unlocks a new level of developer experience when working with databases thanks to its intuitive data model, automated migrations, type-safety & auto-completion. Here are some prism powers:
+## :hammer_and_wrench: Tools
 
-- <strong>Prisma schema | Data model you can read</strong> - The Prisma schema is intuitive and lets you declare your database tables in a human-readable way — making your data modeling experience a delight. You define your models by hand or introspect them from an existing database.
+### Frontend
+
+* React
+* TypeScript
+* Fetch API
+* Radix UI
+* Firebase
+* TailwindCSS
+* Vite
+
+### Backend
+
+* Node.js
+* TypeScript
+* Prisma
+* Express
+
+## :mailbox_with_mail: Utilities
  
-- <strong>Prisma Client | Type-safe database client</strong> - Prisma Client is a query builder that’s tailored to your schema. We designed its API to be intuitive, both for SQL veterans and developers brand new to databases. The auto-completion helps you figure out your query without the need for documentation.
+### Fetch API
 
-- <strong>Prisma Migrate | Hassle-free migrations</strong> - Prisma Migrate auto-generates SQL migrations from your Prisma schema. These migration files are fully customizable, giving you full control and ultimate flexibility — from local development to production environments.
+The Fetch API is a JavaScript interface that provides an easy and powerful way to fetch resources on the web. It is a modern alternative to the old XMLHttpRequest (XHR), which allows developers to send and receive data through HTTP and HTTPS requests.
 
-- <strong>Prisma Studio | Visual database browser</strong> - Prisma Studio is the easiest way to explore and manipulate data in your Prisma projects. Understand your data by browsing across tables, filter, paginate, traverse relations and edit your data with safety.
+The Fetch API has a cleaner syntax and is based on Promises, which makes it easier to use compared to XHR. It allows developers to work with JSON, XML, Blob, FormData and other data types.
 
-### Integration with MongoDB
+To make a request using the Fetch API, the developer needs to create a request object with information about the resource he wants to fetch. It then passes this request object to the fetch() function, which returns a Promise containing the server's response.
 
-#### Prerequisites
+The Fetch API is supported by all major modern browsers as well as Node.js. It's an essential technology for building web applications that need to interact with remote servers.
+
+### Radix UI
+
+Radix UI is a user interface (UI) component library that offers a practical and consistent approach to building web interfaces. Radix UI's goal is to provide simple, efficient and accessible components that can be easily styled and customized to adapt to different projects and needs. The library offers a wide variety of components such as buttons, checkboxes, progress bars, menus, forms and much more.
+
+The tagline "Why waste time reinventing UI components?" emphasizes the idea that it is often unnecessary and inefficient to reinvent the wheel when building a user interface. With Radix UI, developers can use components already tested and approved by the community and thus save time and resources. Additionally, the library promotes user interface standardization, which can make the user experience more consistent and enjoyable.
+
+## :speech_balloon: Explanations
+
+### Prisma ORM: Integration with MongoDB
+
+* <strong>Prerequisites</strong>:
 
 In order to successfully complete this guide, you need:
- - Node.js installed on your machine
- - MongoDB Shell (mongosh) installed 
- - Access to a MongoDB 4.2+ server with a `replica set` deployment. We recommend using MongoDB Atlas.
- - The MongoDB database connector uses transactions to support nested writes. Transactions `require a replica set` deployment. The easiest way to deploy a replica set is with Atlas. It's free to get started.
+* Node.js installed on your machine
+* MongoDB Shell (mongosh) installed 
+* Access to a MongoDB 4.2+ server with a <strong>replica set</strong> deployment. We recommend using MongoDB Atlas.
+* The MongoDB database connector uses transactions to support nested writes. Transactions <strong>require a replica set</strong>  deployment. The easiest way to deploy a replica set is with Atlas. It's free to get started.
 
 <i>Make sure you have your database connection URL at hand.</i> <br />
 
-<br />
+#### Configuring replica set locally
 
-### Configuring replica set locally
+* <strong>Replication in MongoDB</strong>
 
-#### Replication in MongoDB
-
-A replica set in MongoDB `is a group of mongod processes that maintain the same data set`. Replica sets `provide redundancy and high availability`, and are the basis for all production deployments. 
+A replica set in MongoDB is a group of mongod processes that maintain the same data set. Replica sets provide redundancy and high availability, and are the basis for all production deployments. 
 
 A replica set is a group of mongod instances that maintain the same data set. A replica set contains several data bearing nodes and optionally one arbiter node. Of the data bearing nodes, one and only one member is deemed the primary node, while the other nodes are deemed secondary nodes.
 
@@ -131,7 +155,7 @@ replication:
    replSetName: "rs0"
 ```
 
-`Exit superuser mode` and `start the mongoDB server` to `connect with mongosh` to one of the mongod instances.
+Exit superuser mode and start the mongoDB server to connect with mongosh to one of the mongod instances.
 
  - `exit`
  - `sudo systemctl start mongod`
@@ -143,9 +167,7 @@ From mongosh, run `rs.initiate()` on replica set member 0.
 
  - `rs.initiate()`
 
-<br />
-
-### Starting Project with Prisma
+#### Starting Project with Prisma
 
 1. <strong>Now, initialize a TypeScript project using npm:</strong>
 
@@ -171,11 +193,11 @@ From mongosh, run `rs.initiate()` on replica set member 0.
 
 2. <strong>Model your data in the Prisma schema</strong>
 
-Don't forget to add your `Connection URL` to MongoDB in the `.env` file.
+Don't forget to add your Connection URL to MongoDB in the `.env` file.
 
 `DATABASE_URL="mongodb://localhost:27017/nlw-esports?replicaSet=rs0`
 
-After reading some content, found that prisma migrate commands are for the SQL databases only since they have a rigid table structure. But `MongoDB is a document database and those data are unstructured`.
+After reading some content, found that prisma migrate commands are for the SQL databases only since they have a rigid table structure. But MongoDB is a document database and those data are unstructured.
 
 So rather than running prisma migrate command we can use following command
 
@@ -185,151 +207,21 @@ This command creates the Prisma client that gives type-safe access to our databa
 
 - `npx prisma studio`
 
-*<i>prisma.io</i>  <br />
-*<i>mongodb.com/docs/manual/tutorial/deploy-replica-set</i>  <br />
-
 <br />
 
-## Express Controller Class with Prisma Client
+### Redux Toolkit and Google Auth Provider
 
-Express is a framework for Node.js used to build the `backend for web applications`. It is `unopinionated`, meaning that you can use it in a manner in which you see fit. In this tutorial, I present a way that works for me while working with the TypeScript Express.
+Redux Toolkit is a state management library, it is most commonly used with libraries like React or Angular to create user interfaces. In this application, Redux was used only to store the user's login state, that is, if the user is logged in or not, if so, we also obtain some data provided by the Google authentication provider to identify the user, such as the email for example .
 
-After starting your project with the required dependencies, to run our project, we need to add a script in our `package.json`:
+#### Authentication with Firebase
 
-```json
-"scripts": {
-  "build": "tsc",
-  "dev": "tsnd --exit-child src/server.ts"
-},
-```
-
-As you can see, our app starts at the `server.ts` file in the `src` directory. Let’s start with the basics:
-
-```ts
-import express from 'express'
-import cors from 'cors'
-import dotenv from 'dotenv'
-import { router } from './routes'
-
-dotenv.config()
-
-const app = express()
-app.use(
-  cors({
-    origin: process.env.ORIGIN,
-  })
-)
-
-app.use(cors())
-app.use(express.json())
-app.use('/api/game', router)
-
-app.listen(process.env.PORT, () => {
-  console.log(`Server listening on PORT: ${process.env.PORT}`)
-})
-```
-
- - <strong>dotenv.config()</strong> - Loads environment variables from .env file.
- - <strong>express()</strong> - Creates the Express application that we are going to interact with.
- - <strong>app.use(cors())</strong> - CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
- - <strong>express.json()</strong> - Is a built in middleware function in Express starting from v4.16.0. It parses incoming JSON requests and puts the parsed data in req.body.
- - <strong>app.use('/api/game', router)</strong> - Mount the router as middleware at path /api/game.
- - <strong>app.listen()</strong> - Function that does the app listen for a connection on the specified port. 
- 
-*<i>Use the express.Router class to create modular, mountable route handlers. A Router instance is a complete middleware and routing system; for this reason, it is often referred to as a "mini-app".</i> <br />
- 
-*<i>Cross-origin resource sharing (CORS) is a mechanism that allows restricted resources on a web page to be requested from another domain outside the domain from which the first resource was served.</i> <br />
-
-### Middleware
-
-Middleware functions have access to the `request and response objects`. `It can attach to any place in the request-response cycle`. A third argument that middleware receives is the `next function`. When called, `the next middleware in the chain is executed`. An example of a middleware is the get callback that handles the HTTP GET request that we’ve written above. It is a very specific middleware that executes on a particular case. They can also perform more generic tasks. Let’s create a very simple logger middleware that will `log to console what requests were made`.
-
-```ts
-import * as express from 'express';
- 
-function loggerMiddleware(request: express.Request, response: express.Response, next) {
-  console.log(`${request.method} ${request.path}`);
-  next();
-}
- 
-const app = express();
- 
-app.use(loggerMiddleware);
- 
-app.get('/hello', (request, response) => {
-  response.send('Hello world!');
-});
- 
-app.listen(5000);
-```
-
-### Controllers
-
-A common way to structure an Express application is called `Model-View-Controller`. Some of the main components of MVC are `controllers`. They contain the `application logic and handle handling client requests`. Since we're covering TypeScript with Express, we use classes.
-
-```ts
-// server/src/controllers/game.ts
-
-export class GameController {
-  async addGame(req: Request, res: Response) {
-    const { title, bannerUrl } = req.body
-
-    await prisma.game
-      .create({
-        data: {
-          title: title,
-          bannerUrl: bannerUrl,
-        },
-      })
-      .then((game) => res.status(201).json(game))
-      .catch((error) => {
-        console.error(error)
-        return res.status(500).json({
-          status: false,
-          msg: error,
-        })
-      })
-  }
-  // ...
-}
-```
-
-As we are using Prisma and TypeScript, we obtain its auto complete which allows us to identify the schemas in the database and their tables, even if you try to add a non-existent property to the database you will already receive a compilation error.
-
-To call your controller methods as a callback function in Express routing, we must first instantiate our controller by assigning it to a variable, and then we will have access to its methods:
-
-```ts
-// server/src/routes.ts
-import { Router } from 'express'
-import { GameController } from './controllers/game'
-
-const router = Router()
-
-const game = new GameController()
-
-router.get('/games/:page', game.getGames)
-// ...
-```
-
-In addition to taking advantage of the PrismaClient instance to read and write in our application's database, we could have created countless ways to keep our controller even more robust and easy to maintain, such as typing the body of requests.
-
-*<i>wanago.io/2018/12/03/typescript-express-tutorial-routing-controllers-middleware</i> <br />
-
-<br />
-
-## Redux Toolkit and Google Auth Provider
-
-Redux Toolkit is a `state management` library, it is most commonly used with libraries like React or Angular to create `user interfaces`. In this application, Redux was used only to store the user's login state, that is, if the user is logged in or not, if so, we also obtain some data provided by the Google authentication provider to identify the user, such as the email for example .
-
-### Authentication with Firebase
-
-> Firebase is an `app development platform` that helps you build and develop apps and games that users love. Backed by Google and trusted by millions of businesses around the world.
+> Firebase is an app development platform that helps you build and develop apps and games that users love. Backed by Google and trusted by millions of businesses around the world.
 
 Most applications need to know a user's identity. Knowing a user's identity allows an app to securely save the user's data in the cloud and provide the same personalized experience across all of the user's devices.
 
-`Firebase Authentication` offers easy-to-use `backend services`, `Software Development Kit)` and ready-made UI libraries to authenticate users in your application. It supports authentication using passwords, phone numbers, popular federated identity providers like Google, Facebook and Twitter, and more.
+Firebase Authentication offers easy-to-use backend services SDKs, and ready-made UI libraries to authenticate users in your application. It supports authentication using passwords, phone numbers, popular federated identity providers like Google, Facebook and Twitter, and more.
 
-1. <strong>Create a project in Firebase and go to SDK settings.</strong>
+1. <strong>Create a project in Firebase and go to SDK (Software Development Kit) settings.</strong>
 
  - If you are already using npm and a module bundler such as webpack or Rollup, run the following command to install the latest SDK:
  
@@ -338,7 +230,7 @@ Most applications need to know a user's identity. Knowing a user's identity allo
 2. <strong>Then launch Firebase and start using product SDKs.</strong>
 
 ```ts
-// src/firebase.ts
+// web/src/firebase.ts
 
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
@@ -358,16 +250,16 @@ const auth = getAuth(app)
 export { auth }
 ```
 
-*<i>Remember to enable the sign-in method in `Authentication` in your app in firebase and later define a provider, in this case the chosen one was Google.</i> <br />
+*<i>Remember to enable the sign-in method in Authentication in your app in firebase and later define a provider, in this case the chosen one was Google.</i> <br />
 
 3. <strong>Configuring Redux Toolkit Store with TypeScript.</strong>
 
  - `npm i react-redux @reduxjs/toolkit`
  
-The `store` is the gateway for managing the states of our application, `each data in the store must have its own reducer` (it is in charge of handling all actions and specifies the state of the application), you must assign a slice to your application's reducer (which is, as the name implies, a piece of your application's state), as we will create the user's authentication state and this data will contain some data to identify the user, we pass the `reducer from userSlice` to the `store`:
+The store is the gateway for managing the states of our application, each data in the store must have its own reducer (it is in charge of handling all actions and specifies the state of the application), you must assign a slice to your application's reducer (which is, as the name implies, a piece of your application's state), as we will create the user's authentication state and this data will contain some data to identify the user, we pass the reducer from `userSlice` to the store:
  
 ```ts
-// src/store/index.ts
+// web/src/store/index.ts
 
 import { configureStore } from '@reduxjs/toolkit'
 import { userSlice } from './userSlice'
@@ -387,7 +279,7 @@ export type AppDispatch = typeof store.dispatch
  - Define Typed Hooks
 
 ```ts
-// src/store/hooks.ts
+// web/src/store/hooks.ts
 
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '.'
@@ -400,7 +292,7 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 - We create the state of the `user` which will start as `null` when calling the `login method` the state will become the value that comes in `action.payload`, and to log out a user we create the logout reducer, which will set the user state to `null` again:
 
 ```ts
-// src/store/userSlice.ts
+// web/src/store/userSlice.ts
 
 import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from '.'
@@ -429,7 +321,7 @@ export const selectUser = (state: RootState) => state.userSlice.user
 - Don't forget to envelop your application with the store provider, so your entire application will have access to the store:
 
 ```tsx
-// src/main.tsx
+// wweb/src/main.tsx
 
 import React from 'react'
 import ReactDOM from 'react-dom/client'
@@ -457,7 +349,7 @@ Reinforcing that it is not necessary to use Redux to integrate authentication wi
 Firstly firebase has a very convenient function from its `auth SDK` which is `onAuthStateChanged`, `onAuthStateChanged` adds a watcher for changes in user input state:
 
 ```tsx
-// src/App.tsx
+// web/src/App.tsx
 
 import { onAuthStateChanged } from 'firebase/auth'
 import { useEffect } from 'react'
@@ -562,18 +454,18 @@ export const Main = (props: Props) => {
 
 <br />
 
-## Radix UI | Why waste time reinventing UI components?
+### Radix UI | Why waste time reinventing UI components?
 
 > Unstyled, accessible components for building high‑quality design systems and web apps in React
 
-A component library provides a centralized and managed repository of components for reuse, `one of the greatest purposes of component libraries is to bring more agility to the development of user interfaces`, creating a component can be much more complex than it seems, for example the modal in this application, you would have to think about how you would manage the state of your modal, accessibility, what would be the rendering logic of this component, where would such logic be in your code and among other possibilities.
+A component library provides a centralized and managed repository of components for reuse, one of the greatest purposes of component libraries is to bring more agility to the development of user interfaces, creating a component can be much more complex than it seems, for example the modal in this application, you would have to think about how you would manage the state of your modal, accessibility, what would be the rendering logic of this component, where would such logic be in your code and among other possibilities.
 
 All web components basically have the same behavior, you don't need to think about how a modal, popover or a slider will behave, for example, there are already ready-made libraries made to make these implementations easy to implement, in addition to guaranteeing the better usability for the user.
 
 Let's look at an example Radix UI component in the application:
 
 ```tsx
-// src/components/modals/CreateAdModal.tsx
+// web/src/components/modals/CreateAdModal.tsx
 
 import * as Checkbox from '@radix-ui/react-checkbox'
 
@@ -593,7 +485,7 @@ import * as Checkbox from '@radix-ui/react-checkbox'
 Note that we don't need to worry about rendering logic, just details of how to implement the component in our project and styling, component logic and accessibility are in charge of the library. Of course, a checkbox is a simple component, so let's see the example of a modal, in this case I separated the rendering responsibilities into different components:
 
 ```tsx
-// src/pages/Main.tsx
+// web/src/pages/Main.tsx
 
 {isUserAdmin() && (
   <DialogWrapper modal={<ManageGameModal />}>
@@ -605,7 +497,7 @@ Note that we don't need to worry about rendering logic, just details of how to i
 ``` 
 
 ```tsx
-// src/components/modals/integrate/DialogWrapper.tsx
+// web/src/components/modals/integrate/DialogWrapper.tsx
 
 import * as Dialog from '@radix-ui/react-dialog'
 
@@ -634,7 +526,7 @@ const style = {
 The `children` property that `DialogWrapper` receives is responsible for being the trigger that will open the modal, and the modal will open right after `Dialog.Trigger`, simple, no? But the modal also has predefined behaviors, and Radix UI provides these behaviors, which I built a separate component that will envelop the modal, assigning it the behaviors of a modal, all without having to build different global states or pass parent-to-child props and have all rendering responsibility built into the application:
 
 ```tsx
-// src/components/modals/integrate/DialogPortal.tsx
+// web/src/components/modals/integrate/DialogPortal.tsx
 
 import * as Dialog from '@radix-ui/react-dialog'
 
@@ -661,5 +553,8 @@ const style = {
   title: `text-xl md:text-3xl font-black`,
 }
 ``` 
+
+<p align="center">Project made with :blue_heart: by <a href="https://github.com/stardusteight-d4c">Gabriel Sena</a></p>
+
 
 
