@@ -51,6 +51,14 @@ Radix UI is a user interface (UI) component library that offers a practical and 
 
 The tagline "Why waste time reinventing UI components?" emphasizes the idea that it is often unnecessary and inefficient to reinvent the wheel when building a user interface. With Radix UI, developers can use components already tested and approved by the community and thus save time and resources. Additionally, the library promotes user interface standardization, which can make the user experience more consistent and enjoyable.
 
+### Pagination
+
+Pagination is a technique used on web pages to display large amounts of content in an organized manner by dividing the content into multiple pages. It is a way of facilitating user navigation and improving the user experience by allowing them to browse content more easily and quickly.
+
+There are two main types of paging: traditional paging and infinite paging (or infinite scroll). In traditional pagination, the content is divided into numbered pages and the user has to click on navigation buttons to go from one page to another. In infinite pagination, content is dynamically loaded as the user scrolls down the page, without having to click on navigation buttons.
+
+Both techniques have their advantages and disadvantages and should be chosen according to the needs of the project. Traditional pagination can be easier to implement and is useful for content that needs to be organized into defined pages, while infinite pagination is useful for content that can load dynamically, such as search results or social media feeds. In any case, pagination is an important technique to improve usability and user experience on web pages with large amounts of content.
+
 ## :speech_balloon: Explanations
 
 ### Prisma ORM: Integration with MongoDB
