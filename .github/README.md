@@ -562,6 +562,8 @@ const style = {
 }
 ``` 
 
+![screen](./screenshots/desktop-home.png)
+
 <p align="center">Project made with :blue_heart: by <a href="https://github.com/stardusteight-d4c">Gabriel Sena</a></p>
 
 
